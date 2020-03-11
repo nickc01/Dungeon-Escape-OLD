@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-	Console::SetFullScreenConsole(true);
+	//Console::SetFullScreenConsole(true);
 
 	PrintTitleScreen();
 
@@ -27,10 +27,22 @@ int main()
 
 	map.Generate(2);
 
-	for (auto& room : map.GetFirstRoom()->GetRoomHierarchy())
+	//Renderer::SortDisplayables();
+
+	Renderer::CameraPosition = map.GetSpawnPoint();
+
+	while (true)
+	{
+		//Console::ClearScreen();
+		Renderer::Render();
+
+		Renderer::CameraPosition += Vector2(0, 1);
+	}
+
+	/*for (auto& room : map.GetFirstRoom()->GetAllConnectedRooms())
 	{
 		room->Render();
-	}
+	}*/
 
 	//Vector2 windowSize = Console::GetConsoleWindowSize();
 

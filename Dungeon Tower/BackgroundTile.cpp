@@ -1,6 +1,7 @@
 #include "BackgroundTile.h"
 #include "Renderer.h"
 
+using namespace std;
 
 BackgroundTile::BackgroundTile(Vector2 position, wchar_t character, Color characterColor, Color backgroundColor,bool collidable) : 
 	Sprite(position),
@@ -48,14 +49,27 @@ bool BackgroundTile::IsCollidable() const
 	return collidable;
 }
 
-int BackgroundTile::GetDisplayLayer() const
+/*int BackgroundTile::GetDisplayLayer() const
 {
 	return 0;
-}
+}*/
 
 void BackgroundTile::Render() const
 {
-	Vector2 RenderPosition = Position - Renderer::CameraPosition + (Console::GetConsoleWindowSize() / 2);
+	Vector2 consoleSize = Console::GetConsoleWindowSize();
+
+	Vector2 RenderPosition = Position - Renderer::CameraPosition + (consoleSize / 2);
+
+	int consoleWidth = get<0>(consoleSize);
+	int consoleHeight = get<1>(consoleSize);
+
+	int x = get<0>(RenderPosition);
+	int y = get<1>(RenderPosition);
+
+	if (x < 0 || x >= consoleWidth || y < 0 || y >= consoleHeight)
+	{
+		return;
+	}
 
 	Console::SetColorAtPosition(RenderPosition, color, backgroundColor);
 	Console::DrawCharacter(RenderPosition, character);

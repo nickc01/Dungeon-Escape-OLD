@@ -1,7 +1,7 @@
 #include "Displayable.h"
 #include "Renderer.h"
 
-Displayable::Displayable() 
+/*Displayable::Displayable() 
 {
 	Renderer::AddDisplayable(this);
 }
@@ -9,4 +9,4 @@ Displayable::Displayable()
 Displayable::~Displayable()
 {
 	Renderer::RemoveDisplayable(this);
-}
+}*/

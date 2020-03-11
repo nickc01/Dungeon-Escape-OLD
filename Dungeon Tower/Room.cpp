@@ -44,6 +44,27 @@ void Room::AllAvailableRooms(vector<Room*>& rooms)
 	}
 }
 
+void Room::AllAvailableBranches(std::vector<Branch*>& branches)
+{
+	for (auto branchPtr : GetBranches())
+	{
+		auto branch = *branchPtr;
+		if (branch != nullptr)
+		{
+			if (find(begin(branches), end(branches), branch.get()) >= end(branches))
+			{
+				branches.push_back(branch.get());
+				auto destinationRoom = branch->GetDestinationRoom();
+
+				if (destinationRoom != nullptr)
+				{
+					destinationRoom->AllAvailableBranches(branches);
+				}
+			}
+		}
+	}
+}
+
 Room::Room(Vector2 center, Vector2 dimensions) :
 	Center(center), 
 	Dimensions(dimensions),
@@ -133,6 +154,30 @@ array<shared_ptr<Branch>*, 4> Room::GetBranches()
 	return list;
 }
 
+std::vector<std::shared_ptr<Branch>*> Room::GetEmptyBranches()
+{
+	auto list = std::vector<std::shared_ptr<Branch>*>();
+
+	if (UpBranch == nullptr)
+	{
+		list.push_back(&UpBranch);
+	}
+	if (DownBranch == nullptr)
+	{
+		list.push_back(&DownBranch);
+	}
+	if (LeftBranch == nullptr)
+	{
+		list.push_back(&LeftBranch);
+	}
+	if (RightBranch == nullptr)
+	{
+		list.push_back(&RightBranch);
+	}
+
+	return list;
+}
+
 void Room::SetBranch(Direction direction, std::shared_ptr<Branch> branch)
 {
 	switch (direction)
@@ -167,6 +212,16 @@ const shared_ptr<BackgroundTile>& Room::GetTile(Vector2 position) const
 shared_ptr<BackgroundTile>& Room::GetTile(Vector2 position)
 {
 	return backgroundTiles[position];
+}
+
+const std::shared_ptr<BackgroundTile>& Room::GetTileAbsolutePosition(Vector2 position) const
+{
+	return GetTile(position - GetRect().BottomLeft());
+}
+
+std::shared_ptr<BackgroundTile>& Room::GetTileAbsolutePosition(Vector2 position)
+{
+	return GetTile(position - GetRect().BottomLeft());
 }
 
 const std::shared_ptr<BackgroundTile>& Room::operator[](Vector2 position) const
@@ -243,72 +298,83 @@ bool Room::CheckForCollisions()
 	return false;
 }
 
-void Room::AddRoomToHierarchy(shared_ptr<Room> room)
+void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 {
 	while (true)
 	{
-		Room& availableRoom = FindAvailableRoom();
+		Room& sourceRoom = FindAvailableRoom();
 
-		auto branches = availableRoom.GetBranches();
+		auto branches = sourceRoom.GetEmptyBranches();
 
-		int randomBranchIndex = RandomNumber(0, 4);
+		if (branches.size() == 0)
+		{
+			continue;
+		}
+
+		int randomBranchIndex = RandomNumber(0, branches.size());
 
 		auto branchPtr = branches[randomBranchIndex];
 
 		auto& branch = *branchPtr;
 
-		auto rect = room->GetRect();
+		auto dimensions = destinationRoom->GetDimensions();
+
+		//auto rect = destinationRoom->GetRect();
+		auto rect = sourceRoom.GetRect();
 
 
-		if (branchPtr == &availableRoom.UpBranch)
+		if (branchPtr == &sourceRoom.UpBranch)
 		{
 			branch = make_shared<Branch>(Direction::Up);
 			branch->SetStartPoint({RandomNumber(rect.Left + 1,rect.Right),rect.Top});
 		}
-		else if (branchPtr == &availableRoom.DownBranch)
+		else if (branchPtr == &sourceRoom.DownBranch)
 		{
 			branch = make_shared<Branch>(Direction::Down);
 			branch->SetStartPoint({ RandomNumber(rect.Left + 1,rect.Right),rect.Bottom });
 		}
-		else if (branchPtr == &availableRoom.LeftBranch)
+		else if (branchPtr == &sourceRoom.LeftBranch)
 		{
 			branch = make_shared<Branch>(Direction::Left);
 			branch->SetStartPoint({ rect.Left,RandomNumber(rect.Bottom + 1,rect.Top) });
 		}
-		else if (branchPtr == &availableRoom.RightBranch)
+		else if (branchPtr == &sourceRoom.RightBranch)
 		{
 			branch = make_shared<Branch>(Direction::Right);
 			branch->SetStartPoint({ rect.Right,RandomNumber(rect.Bottom + 1,rect.Top) });
 		}
 
-		branch->SetDestinationRoom(room);
+		branch->SetDestinationRoom(destinationRoom);
 
 		Vector2 EndPoint = branch->GetDestinationPoint();
-		Rect destinationRect = room->GetRect();
+		Rect destinationRect = destinationRoom->GetRect();
 		Vector2 DestinationCenter = Vector2(0, 0);
 
 		switch (branch->GetDirection())
 		{
 		case Direction::Up:
-			DestinationCenter = Vector2(get<0>(EndPoint), get<1>(EndPoint) + (room->GetHeight() / 2));
+			DestinationCenter = Vector2(get<0>(EndPoint), get<1>(EndPoint) + (destinationRoom->GetHeight() / 2));
 			break;
 		case Direction::Right:
-			DestinationCenter = Vector2(get<0>(EndPoint) + (room->GetWidth() / 2), get<1>(EndPoint));
+			DestinationCenter = Vector2(get<0>(EndPoint) + (destinationRoom->GetWidth() / 2), get<1>(EndPoint));
 			break;
 		case Direction::Down:
-			DestinationCenter = Vector2(get<0>(EndPoint), get<1>(EndPoint) - (room->GetHeight() / 2));
+			DestinationCenter = Vector2(get<0>(EndPoint), get<1>(EndPoint) - (destinationRoom->GetHeight() / 2));
 			break;
 		case Direction::Left:
-			DestinationCenter = Vector2(get<0>(EndPoint) - (room->GetWidth() / 2), get<1>(EndPoint));
+			DestinationCenter = Vector2(get<0>(EndPoint) - (destinationRoom->GetWidth() / 2), get<1>(EndPoint));
 			break;
 		}
 
 
-		room->SetCenter(DestinationCenter);
+		destinationRoom->SetCenter(DestinationCenter);
+
+		auto allRooms = GetAllConnectedRooms();
+		auto allBranches = GetAllConnectedBranches();
 
 		if (CheckForCollisions())
 		{
-			branch = nullptr;
+			(*branchPtr) = nullptr;
 			continue;
 		}
 		else
@@ -323,10 +389,18 @@ void Room::AddRoomToHierarchy()
 	AddRoomToHierarchy(make_shared<Room>(Vector2(0,0),Vector2(RandomNumber(20,48), RandomNumber(10, 24))));
 }
 
-const std::vector<Room*> Room::GetRoomHierarchy()
+const std::vector<Room*> Room::GetAllConnectedRooms()
 {
 	std::vector<Room*> rooms{};
 	AllAvailableRooms(rooms);
 
 	return rooms;
+}
+
+const std::vector<Branch*> Room::GetAllConnectedBranches()
+{
+	std::vector<Branch*> branches{};
+	AllAvailableBranches(branches);
+
+	return branches;
 }

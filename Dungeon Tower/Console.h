@@ -69,6 +69,8 @@ namespace Console
 	void SetColorAtPosition(int x, int y, ColorPair colors);
 	void SetColorAtPosition(int x, int y, Color foreground, Color background);
 
+	void ClearScreen();
+
 	template<typename charType>
 	const std::vector<MultiString<charType>> SplitLines(MultiString<charType> input,const charType delimiter = static_cast<charType>('\n'))
 	{

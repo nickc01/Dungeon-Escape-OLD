@@ -22,6 +22,7 @@ class Room
 
 	Room& FindAvailableRoom();
 	void AllAvailableRooms(std::vector<Room*>& rooms);
+	void AllAvailableBranches(std::vector<Branch*>& branches);
 
 
 	//void GetSelfConnections(std::vector<Room*>& OutRooms, std::vector<Branch*>& OutBranches, Direction excludedDirection);
@@ -41,6 +42,7 @@ public:
 
 	std::shared_ptr<Branch> GetBranch(Direction direction);
 	std::array<std::shared_ptr<Branch>*,4> GetBranches();
+	std::vector<std::shared_ptr<Branch>*> GetEmptyBranches();
 	void SetBranch(Direction direction, std::shared_ptr<Branch> branch);
 
 
@@ -48,6 +50,9 @@ public:
 
 	const std::shared_ptr<BackgroundTile>& GetTile(Vector2 position) const;
 	std::shared_ptr<BackgroundTile>& GetTile(Vector2 position);
+
+	const std::shared_ptr<BackgroundTile>& GetTileAbsolutePosition(Vector2 position) const;
+	std::shared_ptr<BackgroundTile>& GetTileAbsolutePosition(Vector2 position);
 
 	const std::shared_ptr<BackgroundTile>& operator[](Vector2 position) const;
 	std::shared_ptr<BackgroundTile>& operator[](Vector2 position);
@@ -62,7 +67,8 @@ public:
 	void AddRoomToHierarchy(std::shared_ptr<Room> room);
 	void AddRoomToHierarchy();
 
-	const std::vector<Room*> GetRoomHierarchy();
+	const std::vector<Room*> GetAllConnectedRooms();
+	const std::vector<Branch*> GetAllConnectedBranches();
 	//~Room();
 };
 

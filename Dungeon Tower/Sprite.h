@@ -14,5 +14,6 @@ public:
 	Sprite(Vector2 position);
 
 	Vector2 GetPosition() const;
+	void SetPosition(Vector2 position);
 };
 

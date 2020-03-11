@@ -4,12 +4,12 @@
 class Displayable
 {
 public:
-	Displayable();
+	//Displayable();
 
 
-	virtual int GetDisplayLayer() const = 0;
+	//virtual int GetDisplayLayer() const = 0;
 	virtual void Render() const = 0;
 
-	virtual ~Displayable();
+	//virtual ~Displayable();
 };
 

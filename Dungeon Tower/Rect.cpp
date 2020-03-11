@@ -36,3 +36,13 @@ bool Rect::Intersects(const Rect& B) const
 
 	//return Left <= B.Right || Top >= B.Bottom || Right >= B.Left || Bottom <= B.Top;
 }
+
+Vector2 Rect::BottomLeft()
+{
+	return Vector2(Left, Bottom);
+}
+
+Vector2 Rect::TopRight()
+{
+	return Vector2(Right, Top);
+}

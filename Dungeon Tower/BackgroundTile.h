@@ -24,7 +24,7 @@ public:
 	bool IsCollidable() const;
 
 	// Inherited via Sprite
-	virtual int GetDisplayLayer() const override;
+	//virtual int GetDisplayLayer() const override;
 	virtual void Render() const override;
 };
 

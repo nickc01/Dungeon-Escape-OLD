@@ -2,6 +2,8 @@
 #include "Direction.h"
 #include "Common.h"
 #include "Vector2.h"
+#include <vector>
+#include "BackgroundTile.h"
 
 class Room;
 
@@ -17,6 +19,10 @@ class Branch
 	Direction direction;
 
 	Vector2 startPoint = Vector2(0, 0);
+
+	std::vector<std::shared_ptr<BackgroundTile>> tiles;
+
+	void CreateTiles();
 
 public:
 
@@ -40,6 +46,18 @@ public:
 	void SetStartPoint(Vector2 point);
 	Vector2 GetStartPoint();
 	Vector2 GetDestinationPoint();
+
+	const std::vector<std::shared_ptr<BackgroundTile>>& GetTiles();
+
+
+	int GetStartLength() const;
+	Direction GetStartDirection() const;
+
+	int GetMidLength() const;
+	Direction GetMidDirection() const;
+
+	int GetEndLength() const;
+	Direction GetEndDirection() const;
 
 	//Vector2 GetStartPoint();
 };

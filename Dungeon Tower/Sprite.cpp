@@ -29,3 +29,8 @@ Vector2 Sprite::GetPosition() const
 {
 	return Position;
 }
+
+void Sprite::SetPosition(Vector2 position)
+{
+	Position = position;
+}

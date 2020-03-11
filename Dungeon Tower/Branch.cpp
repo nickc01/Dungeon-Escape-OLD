@@ -1,6 +1,35 @@
 #include "Branch.h"
 #include "Room.h"
 
+using namespace std;
+
+void Branch::CreateTiles()
+{
+	tiles.clear();
+
+	Vector2 currentPoint = startPoint;
+
+	tiles.push_back(make_shared<BackgroundTile>(currentPoint, L' ', Color::Black, Color::Green));
+
+	for (int i = 0; i < firstLength; i++)
+	{
+		currentPoint += VectorInDirection(direction, 1);
+		tiles.push_back(make_shared<BackgroundTile>(currentPoint, L' ', Color::Black, Color::Blue));
+	}
+
+	for (int i = 0; i < secondLength; i++)
+	{
+		currentPoint += VectorInDirection(midDirection, 1);
+		tiles.push_back(make_shared<BackgroundTile>(currentPoint, L' ', Color::Black, Color::Yellow));
+	}
+
+	for (int i = 0; i < thirdLength; i++)
+	{
+		currentPoint += VectorInDirection(direction, 1);
+		tiles.push_back(make_shared<BackgroundTile>(currentPoint, L' ', Color::Black, Color::Purple));
+	}
+}
+
 Branch::Branch(Direction direction)
 {
 	this->direction = direction;
@@ -57,4 +86,40 @@ Vector2 Branch::GetStartPoint()
 Vector2 Branch::GetDestinationPoint()
 {
 	return startPoint + VectorInDirection(direction, firstLength) + VectorInDirection(midDirection, secondLength) + VectorInDirection(direction, thirdLength);
+}
+
+const std::vector<std::shared_ptr<BackgroundTile>>& Branch::GetTiles()
+{
+	CreateTiles();
+	return tiles;
+}
+
+int Branch::GetStartLength() const
+{
+	return firstLength;
+}
+
+Direction Branch::GetStartDirection() const
+{
+	return direction;
+}
+
+int Branch::GetMidLength() const
+{
+	return secondLength;
+}
+
+Direction Branch::GetMidDirection() const
+{
+	return midDirection;
+}
+
+int Branch::GetEndLength() const
+{
+	return thirdLength;
+}
+
+Direction Branch::GetEndDirection() const
+{
+	return direction;
 }

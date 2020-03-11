@@ -455,6 +455,14 @@ void Console::SetColorAtPosition(int x, int y, Color foreground, Color backgroun
 	FillConsoleOutputAttribute(GetConsoleHandle(), TranslateColors(foreground, background), 1, pos, &charactersWritten);
 }
 
+void Console::ClearScreen()
+{
+	auto dimensions = GetConsoleWindowSize();
+	DWORD CharsWritten;
+	FillConsoleOutputCharacterW(GetConsoleHandle(), L' ', get<0>(dimensions) * get<1>(dimensions), { 0,0 }, &CharsWritten);
+	FillConsoleOutputAttribute(GetConsoleHandle(),0, get<0>(dimensions) * get<1>(dimensions), { 0,0 }, &CharsWritten);
+}
+
 void Console::SetColor(Color Text, Color Background)
 {
 	//Retrieve the handle to the console window
