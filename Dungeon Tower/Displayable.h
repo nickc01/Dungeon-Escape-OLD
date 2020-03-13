@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector2.h"
 
-class Displayable
+/*class Displayable
 {
 public:
 	//Displayable();
@@ -11,5 +11,5 @@ public:
 	virtual void Render() const = 0;
 
 	//virtual ~Displayable();
-};
+};*/
 

@@ -65,7 +65,7 @@ void Room::AllAvailableBranches(std::vector<Branch*>& branches)
 	}
 }
 
-Room::Room(Vector2 center, Vector2 dimensions) :
+Room::Room(Vector2I center, Vector2I dimensions) :
 	Center(center), 
 	Dimensions(dimensions),
 	backgroundTiles(GetWidth(),GetHeight(),nullptr)
@@ -73,57 +73,87 @@ Room::Room(Vector2 center, Vector2 dimensions) :
 	int width = GetWidth();
 	int height = GetHeight();
 
+	//Vector2I bottomLeft = GetRect().BottomLeft();
+
 	for (int x = 1; x < width - 1; x++)
 	{
 		for (int y = 1; y < height - 1; y++)
 		{
-			backgroundTiles[{x, y}] = make_shared<BackgroundTile>(Vector2(x, y), L' ', Color::Black, Color::Blue);
+			backgroundTiles[{x, y}] = BackgroundTile::Create(Common::Sprites::blankTile);
 		}
 	}
 	for (int y = 1; y < height - 1; y++)
 	{
-		backgroundTiles[{width - 1, y}] = make_shared<BackgroundTile>(Vector2(width - 1, y), L'║', Color::BrightWhite, Color::Blue,true);
-		backgroundTiles[{0, y}] = make_shared<BackgroundTile>(Vector2(0, y), L'║', Color::BrightWhite, Color::Blue,true);
+		backgroundTiles[{width - 1, y}] = BackgroundTile::Create(Common::Sprites::rightPiece, true);
+		backgroundTiles[{0, y}] = BackgroundTile::Create(Common::Sprites::leftPiece, true);
+		//backgroundTiles[{width - 1, y}] = make_shared<BackgroundTile>(Vector2I(width - 1, y),Common::Sprites::rightPiece,true);
+		//backgroundTiles[{0, y}] = make_shared<BackgroundTile>(Vector2I(0, y), Common::Sprites::leftPiece,true);
 	}
 	for (int x = 1; x < width - 1; x++)
 	{
-		backgroundTiles[{x, height - 1}] = make_shared<BackgroundTile>(Vector2(x, height - 1), L'═', Color::BrightWhite, Color::Blue,true);
-		backgroundTiles[{x, 0}] = make_shared<BackgroundTile>(Vector2(x, 0), L'═', Color::BrightWhite, Color::Blue,true);
+		backgroundTiles[{x, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomPiece, true);
+		backgroundTiles[{x, 0}] = BackgroundTile::Create(Common::Sprites::topPiece, true);
+		//backgroundTiles[{x, height - 1}] = make_shared<BackgroundTile>(Vector2I(x, height - 1), Common::Sprites::bottomPiece, true);
+		//backgroundTiles[{x, 0}] = make_shared<BackgroundTile>(Vector2I(x, 0), Common::Sprites::topPiece,true);
 	}
-	backgroundTiles[{0, 0}] = make_shared<BackgroundTile>(Vector2(0, 0), L'╔', Color::BrightWhite, Color::Blue,true);
-	backgroundTiles[{width - 1, 0}] = make_shared<BackgroundTile>(Vector2(width - 1, 0), L'╗', Color::BrightWhite, Color::Blue,true);
-	backgroundTiles[{0, height - 1}] = make_shared<BackgroundTile>(Vector2(0, height - 1), L'╚', Color::BrightWhite, Color::Blue,true);
-	backgroundTiles[{width - 1, height - 1}] = make_shared<BackgroundTile>(Vector2(width - 1, height - 1), L'╝', Color::BrightWhite, Color::Blue,true);
+	backgroundTiles[{0, 0}] = BackgroundTile::Create(Common::Sprites::topLeftPiece, true);
+	backgroundTiles[{width - 1, 0}] = BackgroundTile::Create(Common::Sprites::topRightPiece, true);
+	backgroundTiles[{0, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomLeftPiece, true);
+	backgroundTiles[{width - 1, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomRightPiece, true);
+	//backgroundTiles[{0, 0}] = make_shared<BackgroundTile>(Vector2I(0, 0), Common::Sprites::topLeftPiece,true);
+	//backgroundTiles[{width - 1, 0}] = make_shared<BackgroundTile>(Vector2I(width - 1, 0), Common::Sprites::topRightPiece,true);
+	//backgroundTiles[{0, height - 1}] = make_shared<BackgroundTile>(Vector2I(0, height - 1), Common::Sprites::bottomLeftPiece,true);
+	//backgroundTiles[{width - 1, height - 1}] = make_shared<BackgroundTile>(Vector2I(width - 1, height - 1), Common::Sprites::bottomRightPiece,true);
 }
 
-Rect Room::GetRect() const
+RectI Room::GetRect() const
 {
-	return Rect(Center, Dimensions);
+	return RectI(Center, Dimensions);
 }
 
-Vector2 Room::GetCenter() const
+Vector2I Room::GetCenter() const
 {
 	return Center;
 }
 
-void Room::SetCenter(Vector2 center)
+void Room::SetCenter(Vector2I center)
 {
 	Center = center;
 }
 
-Vector2 Room::GetDimensions() const
+Vector2I Room::GetDimensions() const
 {
 	return Dimensions;
 }
 
 int Room::GetWidth() const
 {
-	return get<0>(Dimensions);
+	return Dimensions.x;
 }
 
 int Room::GetHeight() const
 {
-	return get<1>(Dimensions);
+	return Dimensions.y;
+}
+
+int Room::BottomHeight() const
+{
+	return GetRect().BottomHeight();
+}
+
+int Room::TopHeight() const
+{
+	return GetRect().TopHeight();
+}
+
+int Room::LeftWidth() const
+{
+	return GetRect().LeftWidth();
+}
+
+int Room::RightWidth() const
+{
+	return GetRect().RightWidth();
 }
 
 std::shared_ptr<Branch> Room::GetBranch(Direction direction)
@@ -204,37 +234,65 @@ bool Room::Intersects(const Room& B) const
 	return GetRect().Intersects(B.GetRect());
 }
 
-const shared_ptr<BackgroundTile>& Room::GetTile(Vector2 position) const
+const shared_ptr<BackgroundTile>& Room::GetTile(Vector2I position) const
 {
 	return backgroundTiles[position];
 }
 
-shared_ptr<BackgroundTile>& Room::GetTile(Vector2 position)
+shared_ptr<BackgroundTile>& Room::GetTile(Vector2I position)
 {
 	return backgroundTiles[position];
 }
 
-const std::shared_ptr<BackgroundTile>& Room::GetTileAbsolutePosition(Vector2 position) const
+const std::shared_ptr<BackgroundTile>& Room::GetTileAbsolutePosition(Vector2I position) const
 {
 	return GetTile(position - GetRect().BottomLeft());
 }
 
-std::shared_ptr<BackgroundTile>& Room::GetTileAbsolutePosition(Vector2 position)
+std::shared_ptr<BackgroundTile>& Room::GetTileAbsolutePosition(Vector2I position)
 {
 	return GetTile(position - GetRect().BottomLeft());
 }
 
-const std::shared_ptr<BackgroundTile>& Room::operator[](Vector2 position) const
+const std::shared_ptr<BackgroundTile>& Room::operator[](Vector2I position) const
 {
 	return GetTile(position);
 }
 
-std::shared_ptr<BackgroundTile>& Room::operator[](Vector2 position)
+std::shared_ptr<BackgroundTile>& Room::operator[](Vector2I position)
 {
 	return GetTile(position);
 }
 
-void Room::Render() const
+/*void Room::Render(sf::RenderWindow& window)
+{
+	for (Room* room : GetAllConnectedRooms())
+	{
+		auto bottomLeft = room->GetRect().BottomLeft();
+
+		for (int x = 0; x < room->GetWidth(); x++)
+		{
+			for (int y = 0; y < room->GetHeight(); y++)
+			{
+				auto tile = room->backgroundTiles[{x, y}];
+				if (tile != nullptr)
+				{
+					window.draw(tile->GetSprite());
+				}
+			}
+		}
+	}
+
+	for (Branch* branch : GetAllConnectedBranches())
+	{
+		for (auto& tile : branch->GetTiles())
+		{
+			window.draw(tile->GetSprite());
+		}
+	}
+}*/
+
+/*void Room::Render() const
 {
 	auto oldCameraPos = Renderer::CameraPosition;
 
@@ -255,7 +313,7 @@ void Room::Render() const
 	}
 
 	Renderer::CameraPosition = oldCameraPos;
-}
+}*/
 
 /*void Room::GetAllConnections(std::vector<const Room*>& OutRooms, std::vector<const Branch*>& OutBranches) const
 {
@@ -302,6 +360,7 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 {
 	while (true)
 	{
+
 		Room& sourceRoom = FindAvailableRoom();
 
 		auto branches = sourceRoom.GetEmptyBranches();
@@ -317,7 +376,7 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 
 		auto& branch = *branchPtr;
 
-		auto dimensions = destinationRoom->GetDimensions();
+		//auto dimensions = destinationRoom->GetDimensions();
 
 		//auto rect = destinationRoom->GetRect();
 		auto rect = sourceRoom.GetRect();
@@ -326,43 +385,43 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 		if (branchPtr == &sourceRoom.UpBranch)
 		{
 			branch = make_shared<Branch>(Direction::Up);
-			branch->SetStartPoint({RandomNumber(rect.Left + 1,rect.Right),rect.Top});
+			branch->SetStartPoint({RandomNumber(rect.Left + 2,rect.Right - 2),rect.Top});
 		}
 		else if (branchPtr == &sourceRoom.DownBranch)
 		{
 			branch = make_shared<Branch>(Direction::Down);
-			branch->SetStartPoint({ RandomNumber(rect.Left + 1,rect.Right),rect.Bottom });
+			branch->SetStartPoint({ RandomNumber(rect.Left + 2,rect.Right - 2),rect.Bottom });
 		}
 		else if (branchPtr == &sourceRoom.LeftBranch)
 		{
 			branch = make_shared<Branch>(Direction::Left);
-			branch->SetStartPoint({ rect.Left,RandomNumber(rect.Bottom + 1,rect.Top) });
+			branch->SetStartPoint({ rect.Left,RandomNumber(rect.Bottom + 2,rect.Top - 2) });
 		}
 		else if (branchPtr == &sourceRoom.RightBranch)
 		{
 			branch = make_shared<Branch>(Direction::Right);
-			branch->SetStartPoint({ rect.Right,RandomNumber(rect.Bottom + 1,rect.Top) });
+			branch->SetStartPoint({ rect.Right,RandomNumber(rect.Bottom + 2,rect.Top - 2) });
 		}
 
 		branch->SetDestinationRoom(destinationRoom);
 
-		Vector2 EndPoint = branch->GetDestinationPoint();
-		Rect destinationRect = destinationRoom->GetRect();
-		Vector2 DestinationCenter = Vector2(0, 0);
+		Vector2I EndPoint = branch->GetDestinationPoint();
+		//RectI destinationRect = destinationRoom->GetRect();
+		Vector2I DestinationCenter = Vector2I(0, 0);
 
 		switch (branch->GetDirection())
 		{
 		case Direction::Up:
-			DestinationCenter = Vector2(get<0>(EndPoint), get<1>(EndPoint) + (destinationRoom->GetHeight() / 2));
+			DestinationCenter = Vector2I(EndPoint.x, EndPoint.y + (destinationRoom->BottomHeight()));
 			break;
 		case Direction::Right:
-			DestinationCenter = Vector2(get<0>(EndPoint) + (destinationRoom->GetWidth() / 2), get<1>(EndPoint));
+			DestinationCenter = Vector2I(EndPoint.x + (destinationRoom->LeftWidth()), EndPoint.y);
 			break;
 		case Direction::Down:
-			DestinationCenter = Vector2(get<0>(EndPoint), get<1>(EndPoint) - (destinationRoom->GetHeight() / 2));
+			DestinationCenter = Vector2I(EndPoint.x, EndPoint.y - (destinationRoom->TopHeight()));
 			break;
 		case Direction::Left:
-			DestinationCenter = Vector2(get<0>(EndPoint) - (destinationRoom->GetWidth() / 2), get<1>(EndPoint));
+			DestinationCenter = Vector2I(EndPoint.x - (destinationRoom->RightWidth()), EndPoint.y);
 			break;
 		}
 
@@ -386,7 +445,7 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 
 void Room::AddRoomToHierarchy()
 {
-	AddRoomToHierarchy(make_shared<Room>(Vector2(0,0),Vector2(RandomNumber(20,48), RandomNumber(10, 24))));
+	AddRoomToHierarchy(make_shared<Room>(Vector2I(0,0),Vector2I(RandomNumber(10,24), RandomNumber(10, 24))));
 }
 
 const std::vector<Room*> Room::GetAllConnectedRooms()

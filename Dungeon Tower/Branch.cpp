@@ -7,27 +7,32 @@ void Branch::CreateTiles()
 {
 	tiles.clear();
 
-	Vector2 currentPoint = startPoint;
+	Vector2I currentPoint = startPoint;
 
-	tiles.push_back(make_shared<BackgroundTile>(currentPoint, L' ', Color::Black, Color::Green));
+	tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile,currentPoint));
+
 
 	for (int i = 0; i < firstLength; i++)
 	{
-		currentPoint += VectorInDirection(direction, 1);
-		tiles.push_back(make_shared<BackgroundTile>(currentPoint, L' ', Color::Black, Color::Blue));
+		currentPoint += VectorInDirection<int>(direction, 1);
+
+		tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile, currentPoint));
 	}
 
 	for (int i = 0; i < secondLength; i++)
 	{
-		currentPoint += VectorInDirection(midDirection, 1);
-		tiles.push_back(make_shared<BackgroundTile>(currentPoint, L' ', Color::Black, Color::Yellow));
+		currentPoint += VectorInDirection<int>(midDirection, 1);
+
+		tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile, currentPoint));
 	}
 
 	for (int i = 0; i < thirdLength; i++)
 	{
-		currentPoint += VectorInDirection(direction, 1);
-		tiles.push_back(make_shared<BackgroundTile>(currentPoint, L' ', Color::Black, Color::Purple));
+		currentPoint += VectorInDirection<int>(direction, 1);
+
+		tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile, currentPoint));
 	}
+
 }
 
 Branch::Branch(Direction direction)
@@ -73,19 +78,20 @@ Direction Branch::GetDirection()
 	return direction;
 }
 
-void Branch::SetStartPoint(Vector2 point)
+void Branch::SetStartPoint(Vector2I point)
 {
 	startPoint = point;
 }
 
-Vector2 Branch::GetStartPoint()
+Vector2I Branch::GetStartPoint()
 {
 	return startPoint;
 }
 
-Vector2 Branch::GetDestinationPoint()
+Vector2I Branch::GetDestinationPoint()
 {
-	return startPoint + VectorInDirection(direction, firstLength) + VectorInDirection(midDirection, secondLength) + VectorInDirection(direction, thirdLength);
+	//return 
+	return startPoint + VectorInDirection<int>(direction, firstLength) + VectorInDirection<int>(midDirection, secondLength) + VectorInDirection<int>(direction, thirdLength);
 }
 
 const std::vector<std::shared_ptr<BackgroundTile>>& Branch::GetTiles()

@@ -18,7 +18,7 @@ class Branch
 	Direction midDirection = Direction::Up;
 	Direction direction;
 
-	Vector2 startPoint = Vector2(0, 0);
+	Vector2I startPoint = Vector2I(0, 0);
 
 	std::vector<std::shared_ptr<BackgroundTile>> tiles;
 
@@ -43,9 +43,9 @@ public:
 
 	Direction GetDirection();
 
-	void SetStartPoint(Vector2 point);
-	Vector2 GetStartPoint();
-	Vector2 GetDestinationPoint();
+	void SetStartPoint(Vector2I point);
+	Vector2I GetStartPoint();
+	Vector2I GetDestinationPoint();
 
 	const std::vector<std::shared_ptr<BackgroundTile>>& GetTiles();
 
@@ -59,6 +59,6 @@ public:
 	int GetEndLength() const;
 	Direction GetEndDirection() const;
 
-	//Vector2 GetStartPoint();
+	//Vector2I GetStartPoint();
 };
 

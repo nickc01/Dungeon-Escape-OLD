@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Vector2 operator+(Vector2 A, Vector2 B)
+/*Vector2 operator+(Vector2 A, Vector2 B)
 {
 	return Vector2(std::get<0>(A) + std::get<0>(B), std::get<1>(A) + std::get<1>(B));
 }
@@ -62,4 +62,4 @@ Vector2 VectorMath::GreatestParts(Vector2 A, Vector2 B)
 
 
 	return Vector2(Ax > Bx ? Ax : Bx, Ay > By ? Ay : By);
-}
+}*/

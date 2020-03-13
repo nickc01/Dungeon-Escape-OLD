@@ -1,36 +1,44 @@
 #include "Sprite.h"
 #include "Renderer.h"
 
-/*Sprite::Sprite() : Sprite(Vector2(0, 0))
+
+Sprite::Sprite(const sf::Sprite& sprite) :
+	sprite(sprite)
+{
+}
+
+Sprite::Sprite(sf::Sprite&& sprite) :
+	sprite(sprite)
 {
 
 }
 
-Sprite::Sprite(Vector2 position) : Position(position)
+void Sprite::SetSprite(sf::Sprite& sprite)
 {
-	Renderer::AddDisplayable(this);
+	this->sprite = sprite;
+}
+
+void Sprite::SetSprite(sf::Sprite&& sprite)
+{
+	this->sprite = sprite;
+}
+
+sf::Sprite& Sprite::GetSprite()
+{
+	return sprite;
+}
+
+const sf::Sprite& Sprite::GetSprite() const
+{
+	return sprite;
 }
 
 Vector2 Sprite::GetPosition() const
 {
-	return Position;
-}
-
-Sprite::~Sprite()
-{
-	Renderer::RemoveDisplayable(this);
-}*/
-
-Sprite::Sprite() : Sprite(Vector2(0, 0)) {}
-
-Sprite::Sprite(Vector2 position) : Displayable(), Position(position) {}
-
-Vector2 Sprite::GetPosition() const
-{
-	return Position;
+	return sprite.getPosition();
 }
 
 void Sprite::SetPosition(Vector2 position)
 {
-	Position = position;
+	sprite.setPosition(position);
 }

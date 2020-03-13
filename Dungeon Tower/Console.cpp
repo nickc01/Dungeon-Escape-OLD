@@ -2,7 +2,7 @@
 #include <io.h>
 #include <fcntl.h>
 
-using namespace std;
+/*using namespace std;
 
 namespace 
 {
@@ -471,3 +471,4 @@ void Console::SetColor(Color Text, Color Background)
 	//Set the background and text color the console
 	SetConsoleTextAttribute(consoleHandle, Text + (Background * 16));
 }
+*/

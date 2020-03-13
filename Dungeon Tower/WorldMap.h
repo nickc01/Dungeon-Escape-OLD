@@ -1,4 +1,6 @@
 #pragma once
+
+#include <SFML/Graphics.hpp>
 #include <thread>
 #include <memory>
 #include <vector>
@@ -7,10 +9,10 @@
 
 class WorldMap
 {
-	std::vector<std::unique_ptr<Displayable>> Tiles;
+	//std::vector<std::unique_ptr<Sprite>> Tiles;
 
 	std::shared_ptr<Room> TopRoom;
-	//void GenerateRoom(Vector2 center, Vector2 dimensions);
+	//void GenerateRoom(Vector2I center, Vector2I dimensions);
 
 
 	float progress;
@@ -19,13 +21,8 @@ class WorldMap
 	void Flatten();
 
 	Array2D<std::shared_ptr<BackgroundTile>> backgroundLayer;
-	//Array2D<std::shared_ptr<BackgroundTile>> spriteLayer;
 
-
-	Vector2 BottomLeft;
-	Vector2 TopRight;
-
-	Vector2 SpawnPoint;
+	Vector2I SpawnPoint;
 
 public:
 	WorldMap();
@@ -39,10 +36,12 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 
-	Vector2 GetSpawnPoint() const;
+	Vector2I GetSpawnPoint() const;
+
+	void Render(sf::RenderWindow& window) const;
 
 
 
-	Array2D<std::shared_ptr<BackgroundTile>>& GetBackgroundLayer();
+	//Array2D<std::shared_ptr<BackgroundTile>>& GetBackgroundLayer();
 };
 

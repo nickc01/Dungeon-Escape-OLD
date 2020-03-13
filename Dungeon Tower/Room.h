@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector2.h"
-#include "Rect.h"
+#include "RectI.h"
 #include "Array2D.h"
 #include "BackgroundTile.h"
 #include <array>
@@ -10,8 +10,8 @@ enum class Direction;
 
 class Room
 {
-	Vector2 Center;
-	Vector2 Dimensions;
+	Vector2I Center;
+	Vector2I Dimensions;
 
 	Array2D<std::shared_ptr<BackgroundTile>> backgroundTiles;
 
@@ -29,16 +29,21 @@ class Room
 
 
 public:
-	Room(Vector2 center, Vector2 dimensions);
+	Room(Vector2I center, Vector2I dimensions);
 
-	Rect GetRect() const;
-	Vector2 GetCenter() const;
-	void SetCenter(Vector2 center);
+	RectI GetRect() const;
+	Vector2I GetCenter() const;
+	void SetCenter(Vector2I center);
 
-	Vector2 GetDimensions() const;
+	Vector2I GetDimensions() const;
 
 	int GetWidth() const;
 	int GetHeight() const;
+
+	int BottomHeight() const;
+	int TopHeight() const;
+	int LeftWidth() const;
+	int RightWidth() const;
 
 	std::shared_ptr<Branch> GetBranch(Direction direction);
 	std::array<std::shared_ptr<Branch>*,4> GetBranches();
@@ -48,17 +53,17 @@ public:
 
 	bool Intersects(const Room& B) const;
 
-	const std::shared_ptr<BackgroundTile>& GetTile(Vector2 position) const;
-	std::shared_ptr<BackgroundTile>& GetTile(Vector2 position);
+	const std::shared_ptr<BackgroundTile>& GetTile(Vector2I position) const;
+	std::shared_ptr<BackgroundTile>& GetTile(Vector2I position);
 
-	const std::shared_ptr<BackgroundTile>& GetTileAbsolutePosition(Vector2 position) const;
-	std::shared_ptr<BackgroundTile>& GetTileAbsolutePosition(Vector2 position);
+	const std::shared_ptr<BackgroundTile>& GetTileAbsolutePosition(Vector2I position) const;
+	std::shared_ptr<BackgroundTile>& GetTileAbsolutePosition(Vector2I position);
 
-	const std::shared_ptr<BackgroundTile>& operator[](Vector2 position) const;
-	std::shared_ptr<BackgroundTile>& operator[](Vector2 position);
+	const std::shared_ptr<BackgroundTile>& operator[](Vector2I position) const;
+	std::shared_ptr<BackgroundTile>& operator[](Vector2I position);
 
 
-	void Render() const;
+	//void Render(sf::RenderWindow& window);
 
 	//void GetAllConnections(std::vector<const Room*>& OutRooms, std::vector<const Branch*>& OutBranches) const;
 

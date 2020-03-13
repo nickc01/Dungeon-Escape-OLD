@@ -24,7 +24,7 @@ public:
 	}
 
 	template<typename... ConstructorParams>
-	Array2D(Vector2 Dimensions, ConstructorParams&&... params) : Array2D(std::get<0>(Dimensions),std::get<1>(Dimensions),params...)
+	Array2D(Vector2I Dimensions, ConstructorParams&&... params) : Array2D(Dimensions.x,Dimensions.y,params...)
 	{
 
 	}
@@ -59,21 +59,19 @@ public:
 		FlatArray[x + (width * y)] = element;
 	}
 
-	void Set(ElementType element, Vector2 position)
+	void Set(ElementType element, Vector2I position)
 	{
-		Set(std::forward(element), std::get<0>(position), std::get<1>(position));
+		Set(std::forward(element), position.x, position.y);
 	}
 
-	const ElementType& operator[](Vector2 position) const
+	const ElementType& operator[](Vector2I position) const
 	{
-		return Get(std::get<0>(position), std::get<1>(position));
+		return Get(position.x, position.y);
 	}
 
-	ElementType& operator[](Vector2 position)
+	ElementType& operator[](Vector2I position)
 	{
-		return Get(std::get<0>(position), std::get<1>(position));
+		return Get(position.x, position.y);
 	}
-
-
 };
 

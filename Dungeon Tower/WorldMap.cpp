@@ -11,9 +11,9 @@ void WorldMap::Generate(int level)
 
 	int roomsToGenerate = RandomNumber(2 + level, 6 + level);
 
-	Vector2 dimensions = Vector2(RandomNumber(20, 48),RandomNumber(10,24));
+	Vector2I dimensions = Vector2I(RandomNumber(10, 24),RandomNumber(10,24));
 
-	TopRoom = make_shared<Room>(Vector2(0,0),dimensions);
+	TopRoom = make_shared<Room>(Vector2I(0,0),dimensions);
 
 	for (int i = 0; i < roomsToGenerate; i++)
 	{
@@ -27,38 +27,46 @@ void WorldMap::Generate(int level)
 
 void WorldMap::Flatten()
 {
-	BottomLeft = {0,0};
-	TopRight = {0,0};
+	Vector2I BottomLeft = {0,0};
+	Vector2I TopRight = {0,0};
 
 	for (Room* room : TopRoom->GetAllConnectedRooms())
 	{
-		Rect roomRect = room->GetRect();
+		RectI roomRect = room->GetRect();
 
 		BottomLeft = VectorMath::SmallestParts(BottomLeft, roomRect.BottomLeft());
 		TopRight = VectorMath::GreatestParts(TopRight, roomRect.TopRight());
 	}
 
-	Vector2 Dimensions = TopRight - BottomLeft;
+	Vector2I Dimensions = TopRight - BottomLeft + Vector2I(1,1);
 
 	backgroundLayer = decltype(backgroundLayer)(Dimensions, nullptr);
-	//spriteLayer = decltype(spriteLayer)(Dimensions, nullptr);
 
-	for (Room* room : TopRoom->GetAllConnectedRooms())
+	auto rooms = TopRoom->GetAllConnectedRooms();
+
+
+	for (Room* room : rooms)
 	{
-		Rect roomRect = room->GetRect();
+		RectI roomRect = room->GetRect();
 
 		for (int x = 0; x < room->GetWidth(); x++)
 		{
 			for (int y = 0; y < room->GetHeight(); y++)
 			{
-				Vector2 roomPos = Vector2(x, y);
-				Vector2 layerPos = roomPos + roomRect.BottomLeft() - BottomLeft;
+				Vector2I relativePos = Vector2I(x, y);
+				Vector2I layerPos = relativePos + roomRect.BottomLeft() - BottomLeft;
 
-				auto& tile = room->GetTile(roomPos);
+				auto& tile = room->GetTile(relativePos);
 
-				tile->SetPosition(layerPos);
+				auto textureSize = tile->GetSprite().getTexture()->getSize();
+
+				Vector2 tilePosition = Vector2(layerPos.x * textureSize.x,layerPos.y * textureSize.y);
+
+				tile->GetSprite().setPosition(tilePosition);
+				//tile->SetP(tilePosition);
 
 				backgroundLayer[layerPos] = tile;
+
 			}
 		}
 
@@ -72,15 +80,21 @@ void WorldMap::Flatten()
 	{
 		for (auto tile : branch->GetTiles())
 		{
-			Vector2 layerPos = tile->GetPosition() - BottomLeft;
+			Vector2I layerPos = Vector2I(tile->GetSprite().getPosition()) - BottomLeft;
 
-			tile->SetPosition(layerPos);
+			auto textureSize = tile->GetSprite().getTexture()->getSize();
+
+			Vector2 tilePosition = Vector2(layerPos.x * textureSize.x, layerPos.y * textureSize.y);
+
+			tile->GetSprite().setPosition(tilePosition);
+
+			//Common::window.draw(tile->GetSprite());
+			//Common::window.display();
+			//tile->SetPosition(tile->GetPosition() * 16.0f);
 
 			backgroundLayer[layerPos] = tile;
 		}
 	}
-
-	Renderer::BackgroundTiles = backgroundLayer;
 }
 
 WorldMap::WorldMap()
@@ -106,12 +120,12 @@ void WorldMap::GenerateAsync(int level)
 	return TopRoom;
 }*/
 
-/*Vector2 WorldMap::GetBottomLeft() const
+/*Vector2I WorldMap::GetBottomLeft() const
 {
 	return BottomLeft;
 }
 
-Vector2 WorldMap::GetTopRight() const
+Vector2I WorldMap::GetTopRight() const
 {
 	return TopRight;
 }*/
@@ -126,29 +140,52 @@ int WorldMap::GetHeight() const
 	return backgroundLayer.GetHeight();
 }
 
-Vector2 WorldMap::GetSpawnPoint() const
+Vector2I WorldMap::GetSpawnPoint() const
 {
 	return SpawnPoint;
 }
 
-Array2D<std::shared_ptr<BackgroundTile>>& WorldMap::GetBackgroundLayer()
+void WorldMap::Render(sf::RenderWindow& window) const
+{
+	auto view = window.getView();
+
+	auto viewRect = sf::Rect<int>((sf::Vector2i(view.getCenter())), sf::Vector2i(view.getSize()));
+
+	auto bottomLeft = Vector2I(viewRect.left, viewRect.top - viewRect.height);
+	auto topRight = Vector2I(viewRect.left + viewRect.width, viewRect.top);
+
+	auto worldBL = bottomLeft / (int)Common::Textures::blankTexture.GetTexture().getSize().x;
+	auto worldTR = topRight / (int)Common::Textures::blankTexture.GetTexture().getSize().y;
+
+	auto worldView = sf::Rect<float>(worldBL.x, worldTR.y, worldTR.x - worldBL.x, worldTR.y - worldBL.y);
+
+
+	auto worldViewClamped = sf::Rect<int>(floorf(worldView.left), ceilf(worldView.top), ceilf(worldView.width), ceilf(worldView.height));
+
+
+	for (int x = worldViewClamped.left - 2; x < (worldViewClamped.left + worldViewClamped.width) + 2; x++)
+	{
+		for (int y = (worldViewClamped.top - worldViewClamped.height) - 2; y < worldViewClamped.top + 2; y++)
+		{
+			int newX = x - (worldViewClamped.width / 2);
+			int newY = y + (worldViewClamped.height / 2);
+			if (newX < 0 || newX >= backgroundLayer.GetWidth() || newY < 0 || newY >= backgroundLayer.GetHeight())
+			{
+
+			}
+			else
+			{
+				auto tile = backgroundLayer[{newX, newY}];
+				if (tile != nullptr)
+				{
+					window.draw(backgroundLayer[{newX, newY}]->GetSprite());
+				}
+			}
+		}
+	}
+}
+
+/*Array2D<std::shared_ptr<BackgroundTile>>& WorldMap::GetBackgroundLayer()
 {
 	return backgroundLayer;
-}
-
-/*std::shared_ptr<BackgroundTile> WorldMap::GetBackgroundTile(int x, int y)
-{
-	if (x < 0 || x >= backgroundLayer.GetWidth() || y < 0 || y >= backgroundLayer.GetHeight())
-	{
-		return shared_ptr<BackgroundTile>(nullptr);
-	}
-	else
-	{
-		return backgroundLayer.Get(x, y);
-	}
-}
-
-std::shared_ptr<BackgroundTile> WorldMap::GetBackgroundTile(Vector2 position)
-{
-	return GetBackgroundTile(get<0>(position), get<1>(position));
 }*/

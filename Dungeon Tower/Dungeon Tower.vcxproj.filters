@@ -45,13 +45,19 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Branch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Direction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RectI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,9 +89,6 @@
     <ClInclude Include="Room.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Array2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -95,5 +98,33 @@
     <ClInclude Include="Direction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RectI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Dungeon Tower.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Blank.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TopLeftCorner.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TopPiece.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

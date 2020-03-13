@@ -1,7 +1,5 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
 #include "Vector2.h"
 #include "Common.h"
 #include <memory>
@@ -9,7 +7,10 @@
 #include <iostream>
 #include <vector>
 
-enum Color
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
+/*enum Color
 {
 	Black = 0,
 	Blue = 1,
@@ -150,4 +151,4 @@ namespace Console
 	}
 
 	void SetColor(Color Text = BrightWhite, Color Background = Black);
-}
+}*/

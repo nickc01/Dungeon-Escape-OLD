@@ -1,43 +1,201 @@
-﻿#include <string>
+﻿#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include <string>
 #include <iostream>
-#include "Renderer.h"
-#include "Console.h"
+//#include "Renderer.h"
+//#include "Console.h"
+//#include "Common.h"
+//#include "Room.h"
+//#include "WorldMap.h"
+#include "ResourceTexture.h"
+#include "resource.h"
 #include "Common.h"
-#include "Room.h"
 #include "WorldMap.h"
 
 using namespace std;
 
 
+
 int main()
 {
+	Common::CreateSprites();
 	//Console::SetFullScreenConsole(true);
 
-	PrintTitleScreen();
 
-	PrintInstructions();
+	//ResourceTexture blankTexture = ResourceTexture(BLANK_TILE);
 
-	Console::UseUnicode();
+	//sf::Sprite sprite = sf::Sprite(blankTexture.GetTexture());
 
-	//Console::SetFullScreenConsole(false);
+	//sprite.setOrigin(8, 8);
 
-	system("cls");
+	//sprite.setPosition({ 0,0 });
+
+	//sf::RenderWindow window(sf::VideoMode(800, 600), "This is a test");
+	auto& window = Common::window;
+
+	//sf::View view = window.getView();
+
+	auto windowSize = window.getSize();
+
+	//view.setCenter({windowSize.x / 2.0f,windowSize.y / 2.0f});
+
+	//view.setRotation(90);
+
+	//window.setView(sf::View({ 0,0 }, {(float)windowSize.x,(float)windowSize.y}));
+	//window.setView(view);
 
 	WorldMap map;
 
-	map.Generate(2);
+	map.Generate(100);
+
+	window.setView(sf::View({ map.GetWidth() * 8.0f, map.GetHeight() * 8.0f }, sf::Vector2f(window.getSize()) / 2.0f));
+
+	sf::Clock clock;
+	
+
+	while (window.isOpen())
+	{
+		sf::Event e;
+
+		auto dt = clock.restart();
+
+		if (window.pollEvent(e))
+		{
+			if (e.type == e.Closed)
+			{
+				window.close();
+			}
+
+			if (e.type == e.Resized)
+			{
+				window.setView(sf::View({ map.GetWidth() * 8.0f,map.GetHeight() * 8.0f }, sf::Vector2f(window.getSize()) / 2.0f));
+			}
+		}
+
+		auto view = window.getView();
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+		{
+			view.move(0, -200.0f * dt.asSeconds());
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+		{
+			view.move(0, 200.0f * dt.asSeconds());
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+		{
+			view.move(200.0f * dt.asSeconds(),0);
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+		{
+			view.move(-200.0f * dt.asSeconds(), 0);
+		}
+
+		window.setView(view);
+
+		//sprite.rotate(90 * dt.asSeconds());
+
+		window.clear(sf::Color::Black);
+
+		//map.Generate(2);
+
+		//window.draw(sprite);
+
+		//map.Render(window);
+
+		map.Render(window);
+
+		//auto& layer = map.GetBackgroundLayer();
+
+		
+
+		
+
+		/*auto& layer = map.GetBackgroundLayer();
+
+		auto size = sf::Vector2i(view.getSize()) / 16;
+
+		auto viewRect = sf::Rect<int>((sf::Vector2i(view.getCenter()) / 16) - sf::Vector2i(size.x / 2, -size.y / 2), sf::Vector2i(view.getSize()) / 16);
+
+		auto viewingArea = sf::Rect<int>(floorf(viewRect.left), ceilf(viewRect.top), ceilf(viewRect.width), ceilf(viewRect.height));
+
+		for (int x = viewingArea.left; x <= (viewingArea.left + viewingArea.width); x++)
+		{
+			for (int y = (viewingArea.top - viewingArea.height); y <= viewingArea.top; y++)
+			{
+				//auto coords = window.mapPixelToCoords({ x,y });
+				if (x < 0|| x >= layer.GetWidth() || y < 0 || y >= layer.GetHeight())
+				{
+					break;
+				}
+				else
+				{
+					auto tile = layer[{x, y}];
+					if (tile != nullptr)
+					{
+						window.draw(layer[{x, y}]->GetSprite());
+					}
+				}
+			}
+		}*/
+
+		/*auto& layer = map.GetBackgroundLayer();
+
+		for (int x = 0; x < layer.GetWidth(); x++)
+		{
+			for (int y = 0; y < layer.GetHeight(); y++)
+			{
+				auto tile = layer[{x,y}];
+				if (tile != nullptr)
+				{
+					window.draw(layer[{x, y}]->GetSprite());
+				}
+			}
+		}*/
+
+		//var backgroundLayer = 
+
+		//ResourceFile file = ResourceFile(BLANK_TILE);
+
+		//file.
+
+
+		window.display();
+
+	}
+
+	return 0;
+
+	//PrintTitleScreen();
+
+	//PrintInstructions();
+
+	//Console::UseUnicode();
+
+
+
+	//Console::SetFullScreenConsole(false);
+
+	//system("cls");
+
+	//WorldMap map;
+
+	//map.Generate(2);
 
 	//Renderer::SortDisplayables();
 
-	Renderer::CameraPosition = map.GetSpawnPoint();
+	//Renderer::CameraPosition = map.GetSpawnPoint();
 
-	while (true)
-	{
+	//while (true)
+	//{
 		//Console::ClearScreen();
-		Renderer::Render();
+		//Renderer::Render();
 
-		Renderer::CameraPosition += Vector2(0, 1);
-	}
+		//Renderer::CameraPosition += Vector2(0, 1);
+	//}
 
 	/*for (auto& room : map.GetFirstRoom()->GetAllConnectedRooms())
 	{
@@ -52,7 +210,7 @@ int main()
 
 	//room.Render();
 
-	WaitForInput();
+	//WaitForInput();
 
 	//Renderer::CameraPosition = windowSize / -2;
 

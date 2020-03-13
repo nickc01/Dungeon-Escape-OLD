@@ -1,47 +1,17 @@
 #include "BackgroundTile.h"
 #include "Renderer.h"
 
-using namespace std;
-
-BackgroundTile::BackgroundTile(Vector2 position, wchar_t character, Color characterColor, Color backgroundColor,bool collidable) : 
-	Sprite(position),
-	character(character),
-	color(characterColor),
-	backgroundColor(backgroundColor),
+BackgroundTile::BackgroundTile(const sf::Sprite& sprite, bool collidable) :
+	sprite(sprite),
 	collidable(collidable)
-
 {
 
 }
 
-void BackgroundTile::SetCharacter(wchar_t character)
+BackgroundTile::BackgroundTile(const sf::Sprite& sprite, Vector2I position, bool collidable) :
+	BackgroundTile(sprite,collidable)
 {
-	this->character = character;
-}
-
-wchar_t BackgroundTile::GetCharacter()
-{
-	return character;
-}
-
-void BackgroundTile::SetColor(Color color)
-{
-	this->color = color;
-}
-
-Color BackgroundTile::GetColor()
-{
-	return color;
-}
-
-void BackgroundTile::SetBackgroundColor(Color backgroundColor)
-{
-	this->backgroundColor = backgroundColor;
-}
-
-Color BackgroundTile::GetBackgroundColor()
-{
-	return backgroundColor;
+	this->sprite.setPosition(static_cast<Vector2>(position));
 }
 
 bool BackgroundTile::IsCollidable() const
@@ -49,28 +19,27 @@ bool BackgroundTile::IsCollidable() const
 	return collidable;
 }
 
-/*int BackgroundTile::GetDisplayLayer() const
+const sf::Sprite& BackgroundTile::GetSprite() const
 {
-	return 0;
-}*/
+	return sprite;
+}
 
-void BackgroundTile::Render() const
+sf::Sprite& BackgroundTile::GetSprite()
 {
-	Vector2 consoleSize = Console::GetConsoleWindowSize();
+	return sprite;
+}
 
-	Vector2 RenderPosition = Position - Renderer::CameraPosition + (consoleSize / 2);
+void BackgroundTile::SetSprite(const sf::Sprite& sprite)
+{
+	this->sprite = sf::Sprite(sprite);
+}
 
-	int consoleWidth = get<0>(consoleSize);
-	int consoleHeight = get<1>(consoleSize);
+std::shared_ptr<BackgroundTile> BackgroundTile::Create(const sf::Sprite& sprite, bool collidable)
+{
+	return std::shared_ptr<BackgroundTile>(new BackgroundTile(sprite,collidable));
+}
 
-	int x = get<0>(RenderPosition);
-	int y = get<1>(RenderPosition);
-
-	if (x < 0 || x >= consoleWidth || y < 0 || y >= consoleHeight)
-	{
-		return;
-	}
-
-	Console::SetColorAtPosition(RenderPosition, color, backgroundColor);
-	Console::DrawCharacter(RenderPosition, character);
+std::shared_ptr<BackgroundTile> BackgroundTile::Create(const sf::Sprite& sprite, Vector2I position, bool collidable)
+{
+	return std::shared_ptr<BackgroundTile>(new BackgroundTile(sprite,position, collidable));
 }

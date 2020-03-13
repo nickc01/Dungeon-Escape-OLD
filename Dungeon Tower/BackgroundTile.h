@@ -1,30 +1,27 @@
 #pragma once
+
+#include <SFML/Graphics.hpp>
 #include "Sprite.h"
 #include "Console.h"
-class BackgroundTile : public Sprite
+#include <memory>
+class BackgroundTile
 {
-	wchar_t character;
-	Color color;
-	Color backgroundColor;
+	sf::Sprite sprite;
 	bool collidable;
+	BackgroundTile(const sf::Sprite& sprite, bool collidable = false);
+	BackgroundTile(const sf::Sprite& sprite, Vector2I position, bool collidable = false);
 
 public:
-	BackgroundTile(Vector2 position,wchar_t character, Color characterColor, Color backgroundColor = Black, bool collidable = false);
-
-
-	void SetCharacter(wchar_t character);
-	wchar_t GetCharacter();
-
-	void SetColor(Color color);
-	Color GetColor();
-
-	void SetBackgroundColor(Color backgroundColor);
-	Color GetBackgroundColor();
 
 	bool IsCollidable() const;
 
-	// Inherited via Sprite
-	//virtual int GetDisplayLayer() const override;
-	virtual void Render() const override;
+
+	const sf::Sprite& GetSprite() const;
+	sf::Sprite& GetSprite();
+	void SetSprite(const sf::Sprite& sprite);
+
+
+	static std::shared_ptr<BackgroundTile> Create(const sf::Sprite& sprite, bool collidable = false);
+	static std::shared_ptr<BackgroundTile> Create(const sf::Sprite& sprite, Vector2I position, bool collidable = false);
 };
 

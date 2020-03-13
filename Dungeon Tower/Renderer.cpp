@@ -5,49 +5,15 @@
 #include "Array2D.h"
 #include <thread>
 
-#define WIN32_LEAN_AND_MEAN
+/*#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 using namespace std;
-
-//vector<const Displayable*> DisplayableList;
-
-//vector<const Displayable*> DisplayableList;
-
-//map<int, Array2D<CHAR_INFO>> DisplayMaps;
-
 
 Vector2 Renderer::CameraPosition = Vector2(0, 0);
 
 Array2D<shared_ptr<BackgroundTile>> Renderer::BackgroundTiles;
 
-/*void RenderListPartial(int begin, int end)
-{
-	for (int i = begin; i < end; i++)
-	{
-		DisplayableList[i]->Render();
-	}
-}*/
-
-/*void Renderer::AddDisplayable(const Displayable* sprite)
-{
-	DisplayableList.push_back(sprite);
-}
-
-void Renderer::RemoveDisplayable(const Displayable* sprite)
-{
-	DisplayableList.erase(std::remove(begin(DisplayableList),end(DisplayableList),sprite),end(DisplayableList));
-}
-
-void Renderer::SortDisplayables()
-{
-	sort(begin(DisplayableList), end(DisplayableList), [](const Displayable* A, const Displayable* B)
-	{
-		int ADisplayLayer = A->GetDisplayLayer();
-		int BDisplayLayer = B->GetDisplayLayer();
-		return ADisplayLayer < BDisplayLayer;
-	});
-}*/
 
 void Renderer::Render()
 {
@@ -78,23 +44,4 @@ void Renderer::Render()
 			}
 		}
 	}
-
-	/*vector<thread> threads;
-
-	int partitionSize = DisplayableList.size() / 8;
-
-	for (int i = 0; i < 8; i++)
-	{
-		threads.push_back(thread(RenderListPartial,i * partitionSize,(i + 1) * partitionSize));
-	}
-
-	for (auto& thread : threads)
-	{
-		thread.join();
-	}*/
-	/*for (auto displayable : DisplayableList)
-	{
-		displayable->Render();
-	}*/
-}
-
+}*/
