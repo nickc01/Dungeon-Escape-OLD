@@ -168,17 +168,10 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <ClCompile Include="BackgroundTile.cpp" />
     <ClCompile Include="Branch.cpp" />
     <ClCompile Include="Common.cpp" />
-    <ClCompile Include="Console.cpp" />
-    <ClCompile Include="Direction.cpp" />
-    <ClCompile Include="Displayable.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="RectI.cpp" />
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceFile.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="Room.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="WorldMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -186,17 +179,11 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <ClInclude Include="BackgroundTile.h" />
     <ClInclude Include="Branch.h" />
     <ClInclude Include="Common.h" />
-    <ClInclude Include="Console.h" />
     <ClInclude Include="Direction.h" />
-    <ClInclude Include="Displayable.h" />
-    <ClInclude Include="RectI.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceFile.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Room.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="Vector2.h" />
     <ClInclude Include="WorldMap.h" />
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,10 @@ ResourceFile::ResourceFile(int resource_ID, const std::string resource_class)
     hMemory = LoadResource(nullptr, hResource);
 
     sizeBytes = SizeofResource(nullptr, hResource);
+    if (hMemory == 0)
+    {
+        throw std::exception("Unable to load resource");
+    }
     data = LockResource(hMemory);
 }
 

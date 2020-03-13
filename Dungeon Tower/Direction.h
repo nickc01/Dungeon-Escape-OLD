@@ -1,5 +1,4 @@
 #pragma once
-#include "Vector2.h"
 
 
 enum class Direction
@@ -11,12 +10,7 @@ enum class Direction
 };
 
 
-
-
-Direction RotateDirection(Direction source, int amount);
-
-
-template<typename type>
+template<typename type = int>
 sf::Vector2<type> VectorInDirection(Direction direction, int scalar)
 {
 	switch (direction)
@@ -31,5 +25,22 @@ sf::Vector2<type> VectorInDirection(Direction direction, int scalar)
 		return sf::Vector2<type>(-scalar, 0);
 	}
 	return sf::Vector2<type>(0, 0);
+}
+
+template<typename type = int>
+Direction RotateDirection(Direction source, type amount)
+{
+	type numDirection = static_cast<type>(source);
+
+	numDirection += amount;
+
+	numDirection %= 360;
+
+	if (numDirection < 0)
+	{
+		numDirection += 360;
+	}
+
+	return static_cast<Direction>(static_cast<int>(numDirection));
 }
 

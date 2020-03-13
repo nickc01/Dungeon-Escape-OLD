@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 
@@ -24,7 +25,7 @@ public:
 	}
 
 	template<typename... ConstructorParams>
-	Array2D(Vector2I Dimensions, ConstructorParams&&... params) : Array2D(Dimensions.x,Dimensions.y,params...)
+	Array2D(sf::Vector2<int> Dimensions, ConstructorParams&&... params) : Array2D(Dimensions.x,Dimensions.y,params...)
 	{
 
 	}
@@ -44,6 +45,11 @@ public:
 		return height;
 	}
 
+	bool WithinBounds(int x, int y) const
+	{
+		return !(x < 0 || x >= width || y < 0 || y >= height);
+	}
+
 	const ElementType& Get(int x, int y) const
 	{
 		return FlatArray[x + (width * y)];
@@ -59,17 +65,17 @@ public:
 		FlatArray[x + (width * y)] = element;
 	}
 
-	void Set(ElementType element, Vector2I position)
+	void Set(ElementType element, sf::Vector2<int> position)
 	{
 		Set(std::forward(element), position.x, position.y);
 	}
 
-	const ElementType& operator[](Vector2I position) const
+	const ElementType& operator[](sf::Vector2<int> position) const
 	{
 		return Get(position.x, position.y);
 	}
 
-	ElementType& operator[](Vector2I position)
+	ElementType& operator[](sf::Vector2<int> position)
 	{
 		return Get(position.x, position.y);
 	}

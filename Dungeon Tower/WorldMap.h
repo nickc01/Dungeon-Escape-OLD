@@ -4,25 +4,20 @@
 #include <thread>
 #include <memory>
 #include <vector>
-#include "Displayable.h"
 #include "Room.h"
 
 class WorldMap
 {
-	//std::vector<std::unique_ptr<Sprite>> Tiles;
-
-	std::shared_ptr<Room> TopRoom;
-	//void GenerateRoom(Vector2I center, Vector2I dimensions);
-
-
 	float progress;
+	std::shared_ptr<Room> TopRoom;
+
 	std::unique_ptr<std::thread> thread = nullptr;
 
 	void Flatten();
 
-	Array2D<std::shared_ptr<BackgroundTile>> backgroundLayer;
+	Array2D<std::shared_ptr<BackgroundTile>> tiles;
 
-	Vector2I SpawnPoint;
+	sf::Vector2<int> SpawnPoint;
 
 public:
 	WorldMap();
@@ -36,12 +31,16 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 
-	Vector2I GetSpawnPoint() const;
+	sf::Vector2<int> GetSpawnPoint() const;
 
 	void Render(sf::RenderWindow& window) const;
 
+	bool HasTile(int x, int y, BackgroundTile& output) const;
+	bool HasTile(int x, int y) const;
 
+	bool IsWithinBounds(int x, int y) const;
 
-	//Array2D<std::shared_ptr<BackgroundTile>>& GetBackgroundLayer();
+	BackgroundTile* GetTile(int x, int y) const;
+	BackgroundTile* operator[](sf::Vector2<int> position) const;
 };
 

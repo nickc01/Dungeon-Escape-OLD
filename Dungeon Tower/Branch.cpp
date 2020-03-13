@@ -2,12 +2,13 @@
 #include "Room.h"
 
 using namespace std;
+using namespace sf;
 
 void Branch::CreateTiles()
 {
 	tiles.clear();
 
-	Vector2I currentPoint = startPoint;
+	Vector2<int> currentPoint = startPoint;
 
 	tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile,currentPoint));
 
@@ -53,20 +54,10 @@ Branch::Branch(Direction direction)
 	}
 }
 
-/*std::shared_ptr<Room> Branch::GetSourceRoom()
-{
-	return sourceRoom;
-}*/
-
 std::shared_ptr<Room> Branch::GetDestinationRoom()
 {
 	return destinationRoom;
 }
-
-/*void Branch::SetSourceRoom(std::shared_ptr<Room> room)
-{
-	sourceRoom = room;
-}*/
 
 void Branch::SetDestinationRoom(std::shared_ptr<Room> room)
 {
@@ -78,19 +69,18 @@ Direction Branch::GetDirection()
 	return direction;
 }
 
-void Branch::SetStartPoint(Vector2I point)
+void Branch::SetStartPoint(Vector2<int> point)
 {
 	startPoint = point;
 }
 
-Vector2I Branch::GetStartPoint()
+Vector2<int> Branch::GetStartPoint()
 {
 	return startPoint;
 }
 
-Vector2I Branch::GetDestinationPoint()
+Vector2<int> Branch::GetDestinationPoint()
 {
-	//return 
 	return startPoint + VectorInDirection<int>(direction, firstLength) + VectorInDirection<int>(midDirection, secondLength) + VectorInDirection<int>(direction, thirdLength);
 }
 

@@ -1,15 +1,13 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "Sprite.h"
-#include "Console.h"
 #include <memory>
 class BackgroundTile
 {
 	sf::Sprite sprite;
 	bool collidable;
 	BackgroundTile(const sf::Sprite& sprite, bool collidable = false);
-	BackgroundTile(const sf::Sprite& sprite, Vector2I position, bool collidable = false);
+	BackgroundTile(const sf::Sprite& sprite, sf::Vector2<int> position, bool collidable = false);
 
 public:
 
@@ -22,6 +20,6 @@ public:
 
 
 	static std::shared_ptr<BackgroundTile> Create(const sf::Sprite& sprite, bool collidable = false);
-	static std::shared_ptr<BackgroundTile> Create(const sf::Sprite& sprite, Vector2I position, bool collidable = false);
+	static std::shared_ptr<BackgroundTile> Create(const sf::Sprite& sprite, sf::Vector2<int> position, bool collidable = false);
 };
 

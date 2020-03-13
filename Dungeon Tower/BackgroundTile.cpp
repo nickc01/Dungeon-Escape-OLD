@@ -1,17 +1,18 @@
 #include "BackgroundTile.h"
-#include "Renderer.h"
 
-BackgroundTile::BackgroundTile(const sf::Sprite& sprite, bool collidable) :
+using namespace sf;
+
+BackgroundTile::BackgroundTile(const Sprite& sprite, bool collidable) :
 	sprite(sprite),
 	collidable(collidable)
 {
 
 }
 
-BackgroundTile::BackgroundTile(const sf::Sprite& sprite, Vector2I position, bool collidable) :
+BackgroundTile::BackgroundTile(const Sprite& sprite, Vector2<int> position, bool collidable) :
 	BackgroundTile(sprite,collidable)
 {
-	this->sprite.setPosition(static_cast<Vector2>(position));
+	this->sprite.setPosition(static_cast<Vector2<float>>(position));
 }
 
 bool BackgroundTile::IsCollidable() const
@@ -19,27 +20,27 @@ bool BackgroundTile::IsCollidable() const
 	return collidable;
 }
 
-const sf::Sprite& BackgroundTile::GetSprite() const
+const Sprite& BackgroundTile::GetSprite() const
 {
 	return sprite;
 }
 
-sf::Sprite& BackgroundTile::GetSprite()
+Sprite& BackgroundTile::GetSprite()
 {
 	return sprite;
 }
 
-void BackgroundTile::SetSprite(const sf::Sprite& sprite)
+void BackgroundTile::SetSprite(const Sprite& sprite)
 {
-	this->sprite = sf::Sprite(sprite);
+	this->sprite = Sprite(sprite);
 }
 
-std::shared_ptr<BackgroundTile> BackgroundTile::Create(const sf::Sprite& sprite, bool collidable)
+std::shared_ptr<BackgroundTile> BackgroundTile::Create(const Sprite& sprite, bool collidable)
 {
 	return std::shared_ptr<BackgroundTile>(new BackgroundTile(sprite,collidable));
 }
 
-std::shared_ptr<BackgroundTile> BackgroundTile::Create(const sf::Sprite& sprite, Vector2I position, bool collidable)
+std::shared_ptr<BackgroundTile> BackgroundTile::Create(const Sprite& sprite, Vector2<int> position, bool collidable)
 {
 	return std::shared_ptr<BackgroundTile>(new BackgroundTile(sprite,position, collidable));
 }
