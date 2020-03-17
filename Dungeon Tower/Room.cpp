@@ -5,6 +5,29 @@
 using namespace sf;
 using namespace std;
 
+namespace
+{
+	template<typename rectType>
+	bool RectIntersects(sf::Rect<rectType> rectA, sf::Rect<rectType> rectB)
+	{
+		auto leftA = rectA.left;
+		auto rightA = rectA.left + rectA.width;
+		auto topA = rectA.top;
+		auto bottomA = rectA.top - rectA.height;
+
+		auto leftB = rectB.left;
+		auto rightB = rectB.left + rectB.width;
+		auto topB = rectB.top;
+		auto bottomB = rectB.top - rectB.height;
+
+		if (leftA < rightB && rightA > leftB&& topA > bottomB&& bottomA < topB)
+		{
+			return true;
+		}
+		return false;
+	}
+}
+
 Room& Room::FindAvailableRoom()
 {
 	vector<Room*> AvailableRooms{};
@@ -71,29 +94,32 @@ Room::Room(Vector2<int> center, Vector2<int> dimensions) :
 	backgroundTiles(GetWidth(),GetHeight(),nullptr)
 {
 	int width = GetWidth();
-	int height = GetHeight();;
+	int height = GetHeight();
 
-	for (int x = 1; x < width - 1; x++)
+	auto rect = GetRect();
+
+
+	for (int x = 1; x <= width - 2; x++)
 	{
-		for (int y = 1; y < height - 1; y++)
+		for (int y = 1; y <= height - 2; y++)
 		{
-			backgroundTiles[{x, y}] = BackgroundTile::Create(Common::Sprites::blankTile);
+			backgroundTiles[{x, y}] = BackgroundTile::Create(Common::GetCenterSprite());
 		}
 	}
-	for (int y = 1; y < height - 1; y++)
+	for (int y = 1; y <= height - 2; y++)
 	{
-		backgroundTiles[{width - 1, y}] = BackgroundTile::Create(Common::Sprites::rightPiece, true);
-		backgroundTiles[{0, y}] = BackgroundTile::Create(Common::Sprites::leftPiece, true);
+		backgroundTiles[{width - 1, y}] = BackgroundTile::Create(Common::Sprites::rightPiece);
+		backgroundTiles[{0, y}] = BackgroundTile::Create(Common::Sprites::leftPiece);
 	}
-	for (int x = 1; x < width - 1; x++)
+	for (int x = 1; x <= width - 2; x++)
 	{
-		backgroundTiles[{x, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomPiece, true);
-		backgroundTiles[{x, 0}] = BackgroundTile::Create(Common::Sprites::topPiece, true);
+		backgroundTiles[{x, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomPiece);
+		backgroundTiles[{x, 0}] = BackgroundTile::Create(Common::Sprites::topPiece);
 	}
-	backgroundTiles[{0, 0}] = BackgroundTile::Create(Common::Sprites::topLeftPiece, true);
-	backgroundTiles[{width - 1, 0}] = BackgroundTile::Create(Common::Sprites::topRightPiece, true);
-	backgroundTiles[{0, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomLeftPiece, true);
-	backgroundTiles[{width - 1, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomRightPiece, true);
+	backgroundTiles[{0, 0}] = BackgroundTile::Create(Common::Sprites::topLeftPiece);
+	backgroundTiles[{width - 1, 0}] = BackgroundTile::Create(Common::Sprites::topRightPiece);
+	backgroundTiles[{0, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomLeftPiece);
+	backgroundTiles[{width - 1, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomRightPiece);
 }
 
 Rect<int> Room::GetRect() const
@@ -203,9 +229,37 @@ void Room::SetBranch(Direction direction, std::shared_ptr<Branch> branch)
 	}
 }
 
+bool Room::Intersects(const BackgroundTile& tile) const
+{
+	auto rectA = Rect<float>(GetRect());
+	auto rectB = tile.GetSprite().getGlobalBounds();
+
+	//rectB.left *= tile.GetSprite().getTextureRect().width;
+	//rectB.top *= tile.GetSprite().getTextureRect().height;
+
+	return RectIntersects(rectA, rectB);
+}
+
 bool Room::Intersects(const Room& B) const
 {
-	return GetRect().intersects(B.GetRect());
+
+	auto rectA = GetRect();
+	auto rectB = B.GetRect();
+
+	return RectIntersects(rectA, rectB);
+
+	/*if (leftA > rightB || rightA < leftB || topA < bottomB || bottomA > topB)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}*/
+
+
+
+	//return GetRect().intersects(B.GetRect());
 }
 
 const shared_ptr<BackgroundTile>& Room::GetTile(Vector2<int> position) const
@@ -228,27 +282,39 @@ std::shared_ptr<BackgroundTile>& Room::operator[](Vector2<int> position)
 	return GetTile(position);
 }
 
-
-bool Room::CheckForCollisions()
+bool Room::CheckForCollision(const Room* addedRoom)
 {
 	vector<Room*> Rooms{};
 
 	AllAvailableRooms(Rooms);
 
-	for (auto roomA : Rooms)
+	for (auto room : Rooms)
 	{
-		for (auto roomB : Rooms)
+		if (room == addedRoom)
 		{
-			if (roomB == roomA)
-			{
-				continue;
-			}
-			else if (roomB->Intersects(*roomA))
+			continue;
+		}
+		else if (room->Intersects(*addedRoom))
+		{
+			return true;
+		}
+	}
+
+	vector<Branch*> Branches{};
+
+	AllAvailableBranches(Branches);
+
+	for (auto branch : Branches)
+	{
+		for (auto tile : branch->GetTiles())
+		{
+			if (addedRoom->Intersects(*tile))
 			{
 				return true;
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -276,26 +342,31 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 
 		auto rect = sourceRoom.GetRect();
 
+		int left = rect.left;
+		int right = rect.left + rect.width - 1;
+		int top = rect.top - 1;
+		int bottom = rect.top - rect.height;
+
 
 		if (branchPtr == &sourceRoom.UpBranch)
 		{
 			branch = make_shared<Branch>(Direction::Up);
-			branch->SetStartPoint({RandomNumber(rect.left + 2,rect.left + rect.width - 2),rect.top});
+			branch->SetStartPoint({RandomNumber(left + 2,right - 2),top});
 		}
 		else if (branchPtr == &sourceRoom.DownBranch)
 		{
 			branch = make_shared<Branch>(Direction::Down);
-			branch->SetStartPoint({ RandomNumber(rect.left + 2,rect.left + rect.height - 2),rect.top - rect.height });
+			branch->SetStartPoint({ RandomNumber(left + 2,right - 2),bottom });
 		}
 		else if (branchPtr == &sourceRoom.LeftBranch)
 		{
 			branch = make_shared<Branch>(Direction::Left);
-			branch->SetStartPoint({ rect.left,RandomNumber(rect.top - rect.height + 2,rect.top - 2) });
+			branch->SetStartPoint({ left,RandomNumber(bottom + 2,top - 2) });
 		}
 		else if (branchPtr == &sourceRoom.RightBranch)
 		{
 			branch = make_shared<Branch>(Direction::Right);
-			branch->SetStartPoint({ rect.left + rect.width,RandomNumber(rect.top - rect.height + 2,rect.top - 2) });
+			branch->SetStartPoint({ right,RandomNumber(bottom + 2,top - 2) });
 		}
 
 		branch->SetDestinationRoom(destinationRoom);
@@ -304,20 +375,26 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 		Vector2<int> DestinationCenter = Vector2<int>(0, 0);
 
 		auto destRect = destinationRoom->GetRect();
+		auto destCenter = destinationRoom->Center;
 
 		switch (branch->GetDirection())
 		{
 		case Direction::Up:
-			DestinationCenter = Vector2<int>(EndPoint.x, EndPoint.y + (destRect.height / 2));
+			DestinationCenter = Vector2<int>(EndPoint.x, EndPoint.y + (destCenter.y - (destRect.top - destRect.height)));
+			//DestinationCenter = Vector2<int>(EndPoint.x, EndPoint.y + (destRect.height / 2));
 			break;
 		case Direction::Right:
-			DestinationCenter = Vector2<int>(EndPoint.x + (destRect.width / 2), EndPoint.y);
+			//DestinationCenter = Vector2<int>(EndPoint.x + (destRect.width / 2), EndPoint.y);
+			//DestinationCenter = Vector2<int>(EndPoint.x - (destRect.width / 2), EndPoint.y);
+			DestinationCenter = Vector2<int>(EndPoint.x + (destCenter.x - destRect.left), EndPoint.y);
 			break;
 		case Direction::Down:
-			DestinationCenter = Vector2<int>(EndPoint.x, EndPoint.y - (destRect.height / 2));
+			DestinationCenter = Vector2<int>(EndPoint.x, EndPoint.y - (destRect.top - destCenter.y) + 1);
+			//DestinationCenter = Vector2<int>(EndPoint.x, EndPoint.y - (destRect.height / 2));
 			break;
 		case Direction::Left:
-			DestinationCenter = Vector2<int>(EndPoint.x - (destRect.width / 2), EndPoint.y);
+			//DestinationCenter = Vector2<int>(EndPoint.x - (destRect.width / 2), EndPoint.y);
+			DestinationCenter = Vector2<int>(EndPoint.x - (destRect.left + destRect.width - destCenter.x) + 1, EndPoint.y);
 			break;
 		}
 
@@ -327,7 +404,7 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 		auto allRooms = GetAllConnectedRooms();
 		auto allBranches = GetAllConnectedBranches();
 
-		if (CheckForCollisions())
+		if (CheckForCollision(destinationRoom.get()) || branch->CheckForCollisions(this))
 		{
 			(*branchPtr) = nullptr;
 			continue;
@@ -341,7 +418,7 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 
 void Room::AddRoomToHierarchy()
 {
-	AddRoomToHierarchy(make_shared<Room>(Vector2<int>(0,0),Vector2<int>(RandomNumber(10,24), RandomNumber(10, 24))));
+	AddRoomToHierarchy(make_shared<Room>(Vector2<int>(0,0),Vector2<int>(RandomNumber(MinRoomWidth,MaxRoomWidth), RandomNumber(MinRoomHeight, MaxRoomHeight))));
 }
 
 const std::vector<Room*> Room::GetAllConnectedRooms()

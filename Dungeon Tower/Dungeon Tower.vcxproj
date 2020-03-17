@@ -168,10 +168,17 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <ClCompile Include="BackgroundTile.cpp" />
     <ClCompile Include="Branch.cpp" />
     <ClCompile Include="Common.cpp" />
+    <ClCompile Include="Direction.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Math.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ResourceFile.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="UpdateReceiver.cpp" />
     <ClCompile Include="WorldMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -180,19 +187,39 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <ClInclude Include="Branch.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Direction.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Math.h" />
+    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Renderable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceFile.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Room.h" />
+    <ClInclude Include="UpdateReceiver.h" />
     <ClInclude Include="WorldMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Dungeon Tower.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Blank.png" />
-    <Image Include="TopLeftCorner.png" />
-    <Image Include="TopPiece.png" />
+    <Image Include="Dungeon Tiles\BottomJoint.png" />
+    <Image Include="Dungeon Tiles\BottomLeftPiece.png" />
+    <Image Include="Dungeon Tiles\BottomPiece.png" />
+    <Image Include="Dungeon Tiles\BottomRightPiece.png" />
+    <Image Include="Dungeon Tiles\CenterPiece1.png" />
+    <Image Include="Dungeon Tiles\CenterPiece2.png" />
+    <Image Include="Dungeon Tiles\LeftJoint.png" />
+    <Image Include="Dungeon Tiles\LeftPiece.png" />
+    <Image Include="Dungeon Tiles\Player\Player.png" />
+    <Image Include="Dungeon Tiles\Player\PlayerMageSheet.png" />
+    <Image Include="Dungeon Tiles\RightJoint.png" />
+    <Image Include="Dungeon Tiles\RightPiece.png" />
+    <Image Include="Dungeon Tiles\TopJoint.png" />
+    <Image Include="Dungeon Tiles\TopLeftPiece.png" />
+    <Image Include="Dungeon Tiles\TopPiece.png" />
+    <Image Include="Dungeon Tiles\TopRightPiece.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

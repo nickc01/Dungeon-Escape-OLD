@@ -10,38 +10,156 @@ void Branch::CreateTiles()
 
 	Vector2<int> currentPoint = startPoint;
 
-	tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile,currentPoint));
+	auto leftDirection = RotateDirection(direction, -90);
+	auto rightDirection = RotateDirection(direction, 90);
+
+	auto midLeftDirection = RotateDirection(midDirection, -90);
+	auto midRightDirection = RotateDirection(midDirection, 90);
+
+	auto leftVector = VectorInDirection(leftDirection, 1);
+	auto rightVector = VectorInDirection(rightDirection, 1);
+	auto forwardVector = VectorInDirection(direction, 1);
+
+	auto midLeftVector = VectorInDirection(midLeftDirection, 1);
+	auto midRightVector = VectorInDirection(midRightDirection, 1);
+	auto midForwardVector = VectorInDirection(midDirection, 1);
 
 
-	for (int i = 0; i < firstLength; i++)
+	BuildJointPiece(direction, currentPoint);
+
+	/*tiles.push_back(BackgroundTile::Create(Common::Sprites::centerPiece2,currentPoint));
+
+	tiles[0]->GetSprite().setColor(Color(0, 255, 255));
+
+	tiles.push_back(BackgroundTile::Create(Common::GetJointPiece(leftDirection, direction), currentPoint + rightVector));
+	tiles.push_back(BackgroundTile::Create(Common::GetJointPiece(rightDirection,direction),currentPoint + leftVector));*/
+	//tiles.push_back(BackgroundTile::Create());
+
+
+	for (int i = 1; i < firstLength; i++)
 	{
-		currentPoint += VectorInDirection<int>(direction, 1);
-
-		tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile, currentPoint));
+		currentPoint += forwardVector;
+		BuildStraightPiece(direction, currentPoint);
+		/*tiles.push_back(BackgroundTile::Create(Common::GetSideSprite(leftDirection),currentPoint + leftVector));
+		tiles.push_back(BackgroundTile::Create(Common::Sprites::centerPiece1, currentPoint));
+		tiles.push_back(BackgroundTile::Create(Common::GetSideSprite(rightDirection), currentPoint + rightVector));*/
 	}
 
-	for (int i = 0; i < secondLength; i++)
-	{
-		currentPoint += VectorInDirection<int>(midDirection, 1);
+	currentPoint += forwardVector;
 
-		tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile, currentPoint));
+	BuildCurvePiece(direction, midDirection, currentPoint);
+
+	currentPoint += midForwardVector;
+
+	for (int i = 2; i < secondLength; i++)
+	{
+		currentPoint += midForwardVector;
+
+		BuildStraightPiece(midDirection, currentPoint);
+
+		//BuildTile(Common::Sprites::centerPiece1, currentPoint);
+		//currentPoint += VectorInDirection<int>(midDirection, 1);
+
+		//tiles.push_back(BackgroundTile::Create(Common::Sprites::centerPiece1, currentPoint));
 	}
 
-	for (int i = 0; i < thirdLength; i++)
-	{
-		currentPoint += VectorInDirection<int>(direction, 1);
+	currentPoint += midForwardVector;
 
-		tiles.push_back(BackgroundTile::Create(Common::Sprites::blankTile, currentPoint));
+	BuildCurvePiece(midDirection, direction, currentPoint);
+
+	currentPoint += forwardVector;
+
+	for (int i = 2; i < thirdLength; i++)
+	{
+		currentPoint += forwardVector;
+		BuildStraightPiece(direction, currentPoint);
+		//tiles.push_back(BackgroundTile::Create(Common::Sprites::centerPiece1, currentPoint));
 	}
 
+	currentPoint += forwardVector;
+
+	BuildJointPiece(RotateDirection(direction,180), currentPoint);
+}
+
+void Branch::BuildTile(const Sprite& sprite, Vector2<int> position)
+{
+	tiles.push_back(BackgroundTile::Create(sprite, position));
+}
+
+void Branch::BuildJointPiece(Direction direction, Vector2i position)
+{
+	auto leftDirection = RotateDirection(direction, -90);
+	auto rightDirection = RotateDirection(direction, 90);
+
+	auto leftVector = VectorInDirection(leftDirection, 1);
+	auto rightVector = VectorInDirection(rightDirection, 1);
+	auto forwardVector = VectorInDirection(direction, 1);
+
+	BuildTile(Common::Sprites::centerPiece2,position);
+	BuildTile(Common::GetJointPiece(leftDirection, direction), position + rightVector);
+	BuildTile(Common::GetJointPiece(rightDirection, direction), position + leftVector);
+
+}
+
+void Branch::BuildStraightPiece(Direction direction, sf::Vector2i position)
+{
+	auto leftDirection = RotateDirection(direction, -90);
+	auto rightDirection = RotateDirection(direction, 90);
+
+	auto leftVector = VectorInDirection(leftDirection, 1);
+	auto rightVector = VectorInDirection(rightDirection, 1);
+
+	BuildTile(Common::GetSideSprite(leftDirection), position + leftVector);
+	BuildTile(Common::Sprites::centerPiece2, position);
+	BuildTile(Common::GetSideSprite(rightDirection), position + rightVector);
+}
+
+void Branch::BuildCurvePiece(Direction from, Direction to, sf::Vector2i position)
+{
+	auto leftDirection = RotateDirection(from, -90);
+	auto rightDirection = RotateDirection(from, 90);
+
+	auto destLeftDirection = RotateDirection(to, -90);
+	auto destRightDirection = RotateDirection(to, 90);
+
+	auto leftVector = VectorInDirection(leftDirection, 1);
+	auto rightVector = VectorInDirection(rightDirection, 1);
+	auto forwardVector = VectorInDirection(from, 1);
+
+	auto destLeftVector = VectorInDirection(destLeftDirection, 1);
+	auto destRightVector = VectorInDirection(destRightDirection, 1);
+	auto destForwardVector = VectorInDirection(to, 1);
+
+	BuildTile(Common::Sprites::centerPiece2, position);
+
+	if (to == leftDirection)
+	{
+		BuildTile(Common::GetSideSprite(rightDirection), position + rightVector);
+		BuildTile(Common::GetCornerSprite(from, rightDirection), position + rightVector + forwardVector);
+		BuildTile(Common::GetSideSprite(from), position + forwardVector);
+		BuildTile(Common::GetSideSprite(from), position + forwardVector + leftVector);
+
+		BuildTile(Common::GetJointPiece(from, to), position - forwardVector + leftVector);
+	}
+	else if (to == rightDirection)
+	{
+		BuildTile(Common::GetSideSprite(leftDirection), position + leftVector);
+		BuildTile(Common::GetCornerSprite(from, leftDirection), position + leftVector + forwardVector);
+		BuildTile(Common::GetSideSprite(from), position + forwardVector);
+		BuildTile(Common::GetSideSprite(from), position + forwardVector + rightVector);
+
+		BuildTile(Common::GetJointPiece(from, to), position - forwardVector + rightVector);
+	}
+
+	BuildTile(Common::Sprites::centerPiece2, position + destForwardVector);
 }
 
 Branch::Branch(Direction direction)
 {
 	this->direction = direction;
-	firstLength = RandomNumber(2, 6);
-	secondLength = RandomNumber(1, 7);
-	thirdLength = RandomNumber(3, 8);
+	firstLength = RandomNumber(4, 6);
+	secondLength = RandomNumber(2, 7);
+	thirdLength = RandomNumber(4, 8);
 
 	int directionNumber = RandomNumber(0, 2);
 	if (directionNumber == 1)
@@ -71,6 +189,7 @@ Direction Branch::GetDirection()
 
 void Branch::SetStartPoint(Vector2<int> point)
 {
+	updated = true;
 	startPoint = point;
 }
 
@@ -86,8 +205,55 @@ Vector2<int> Branch::GetDestinationPoint()
 
 const std::vector<std::shared_ptr<BackgroundTile>>& Branch::GetTiles()
 {
-	CreateTiles();
+	if (updated)
+	{
+		CreateTiles();
+		updated = false;
+	}
 	return tiles;
+}
+
+bool Branch::Intersects(Branch& other)
+{
+	for (auto& tileA : GetTiles())
+	{
+		for (auto& tileB : other.GetTiles())
+		{
+			if (tileA == nullptr || tileB == nullptr)
+			{
+				continue;
+			}
+			else if (Common::SpritesIntersect(tileA->GetSprite(),tileB->GetSprite()))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool Branch::CheckForCollisions(Room* TopRoom)
+{
+	for (auto room : TopRoom->GetAllConnectedRooms())
+	{
+		for (auto& tile : GetTiles())
+		{
+			room->Intersects(*tile);
+		}
+	}
+
+	for (auto branch : TopRoom->GetAllConnectedBranches())
+	{
+		if (branch == nullptr || branch == this)
+		{
+			continue;
+		}
+		else if (Intersects(*branch))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 int Branch::GetStartLength() const

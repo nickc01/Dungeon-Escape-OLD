@@ -25,6 +25,13 @@ class Room
 
 
 public:
+
+	static constexpr int MaxRoomWidth = 12;
+	static constexpr int MaxRoomHeight = 12;
+
+	static constexpr int MinRoomWidth = 7;
+	static constexpr int MinRoomHeight = 7;
+
 	Room(sf::Vector2<int> center, sf::Vector2<int> dimensions);
 
 	sf::Rect<int> GetRect() const;
@@ -41,7 +48,7 @@ public:
 	std::vector<std::shared_ptr<Branch>*> GetEmptyBranches();
 	void SetBranch(Direction direction, std::shared_ptr<Branch> branch);
 
-
+	bool Intersects(const BackgroundTile& tile) const;
 	bool Intersects(const Room& B) const;
 
 	const std::shared_ptr<BackgroundTile>& GetTile(sf::Vector2<int> position) const;
@@ -52,7 +59,8 @@ public:
 	std::shared_ptr<BackgroundTile>& operator[](sf::Vector2<int> position);
 
 
-	bool CheckForCollisions();
+	//bool CheckForCollisions();
+	bool CheckForCollision(const Room* addedRoom);
 
 	void AddRoomToHierarchy(std::shared_ptr<Room> room);
 	void AddRoomToHierarchy();

@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Dungeon Tiles">
+      <UniqueIdentifier>{bdccd87d-64d0-4d79-a417-1191e497b975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Dungeon Tiles\Player">
+      <UniqueIdentifier>{e7471680-1d08-4be8-aa43-ff5198804bf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -37,6 +43,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResourceTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateReceiver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Direction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,6 +98,27 @@
     <ClInclude Include="ResourceTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Renderable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateReceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Dungeon Tower.rc">
@@ -78,14 +126,53 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Blank.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="Dungeon Tiles\BottomLeftPiece.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
     </Image>
-    <Image Include="TopLeftCorner.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="Dungeon Tiles\BottomPiece.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
     </Image>
-    <Image Include="TopPiece.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="Dungeon Tiles\BottomRightPiece.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\CenterPiece1.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\CenterPiece2.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\LeftPiece.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\RightPiece.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\TopLeftPiece.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\TopPiece.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\TopRightPiece.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\BottomJoint.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\LeftJoint.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\RightJoint.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\TopJoint.png">
+      <Filter>Resource Files\Dungeon Tiles</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\Player\Player.png">
+      <Filter>Resource Files\Dungeon Tiles\Player</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\Player\PlayerMageSheet.png">
+      <Filter>Resource Files\Dungeon Tiles\Player</Filter>
     </Image>
   </ItemGroup>
 </Project>

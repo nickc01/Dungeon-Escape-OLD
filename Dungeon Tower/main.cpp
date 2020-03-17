@@ -5,33 +5,58 @@
 #include "ResourceTexture.h"
 #include "Common.h"
 #include "WorldMap.h"
+#include "UpdateReceiver.h"
+#include <mutex>
+#include "GameManager.h"
+#include <thread>
 
 using namespace std;
 using namespace sf;
 
-
+//void UpdateWindowView(Vector2f Center);
 
 int main()
 {
 	Common::CreateSprites();
-	auto& window = Common::window;
+	auto& window = Common::MainWindow;
 
-	auto windowSize = window.getSize();
+	//auto windowSize = window.getSize();
 
-	WorldMap map;
+	//window.view
 
-	map.Generate(2);
+	//WorldMap map;
 
-	window.setView(View({ map.GetWidth() * 8.0f, map.GetHeight() * 8.0f }, Vector2f(window.getSize()) / 2.0f));
+	//auto mapValueAddress = &map;
+
+	//map.Generate(20);
+
+	RefreshWindow();
+
+	//Common::MainWindow.setView(View({ map.GetWidth() * 8.0f, map.GetHeight() * 8.0f }, Vector2f(Common::MainWindow.getSize()) / 2.0f));
+
+	//CenterCamera(map.GetDimensions());
+
+	//Vector2f mapCenter = { map.GetWidth() * 8.0f, map.GetHeight() * 8.0f };
+
+	//UpdateWindowView(mapCenter);
+
+	thread gameThread(GameManager::StartGame);
 
 	Clock clock;
-	
 
 	while (window.isOpen())
 	{
 		Event e;
 
 		auto dt = clock.restart();
+		{
+			auto lockObject = unique_lock<recursive_mutex>(UpdateReceiver::GetMutex());
+			for (UpdateReceiver* updatable : UpdateReceiver::GetUpdatables())
+			{
+				updatable->Update(dt);
+			}
+		}
+
 
 		if (window.pollEvent(e))
 		{
@@ -42,39 +67,26 @@ int main()
 
 			if (e.type == e.Resized)
 			{
-				window.setView(View({ map.GetWidth() * 8.0f,map.GetHeight() * 8.0f }, Vector2f(window.getSize()) / 2.0f));
+				RefreshWindow();
 			}
 		}
 
-		auto view = window.getView();
-
-		if (Keyboard::isKeyPressed(Keyboard::Key::Up))
-		{
-			view.move(0, -200.0f * dt.asSeconds());
-		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Key::Down))
-		{
-			view.move(0, 200.0f * dt.asSeconds());
-		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Key::Right))
-		{
-			view.move(200.0f * dt.asSeconds(),0);
-		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Key::Left))
-		{
-			view.move(-200.0f * dt.asSeconds(), 0);
-		}
-
-		window.setView(view);
 
 		window.clear(Color::Black);
 
-		map.Render(window);
+		{
+			auto lockObject = unique_lock<recursive_mutex>(Renderable::GetMutex());
+
+			for (const Renderable* renderObject : Renderable::GetRenderables())
+			{
+				renderObject->Render(window);
+			}
+		}
 
 		window.display();
 
 	}
+
+	GameManager::EndingGame = true;
+	gameThread.join();
 }

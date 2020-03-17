@@ -10,6 +10,8 @@ class Room;
 
 class Branch
 {
+	bool updated = true;
+
 	std::shared_ptr<Room> destinationRoom = nullptr;
 
 	int firstLength = 0;
@@ -23,6 +25,11 @@ class Branch
 	std::vector<std::shared_ptr<BackgroundTile>> tiles;
 
 	void CreateTiles();
+
+	void BuildTile(const sf::Sprite& sprite, sf::Vector2<int> position);
+	void BuildJointPiece(Direction direction, sf::Vector2i position);
+	void BuildStraightPiece(Direction direction, sf::Vector2i position);
+	void BuildCurvePiece(Direction from, Direction to, sf::Vector2i position);
 
 public:
 
@@ -39,6 +46,10 @@ public:
 	sf::Vector2<int> GetDestinationPoint();
 
 	const std::vector<std::shared_ptr<BackgroundTile>>& GetTiles();
+
+	bool Intersects(Branch& other);
+
+	bool CheckForCollisions(Room* TopRoom);
 
 
 	int GetStartLength() const;

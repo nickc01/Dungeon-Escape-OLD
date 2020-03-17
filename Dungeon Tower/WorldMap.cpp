@@ -1,6 +1,7 @@
 #include "WorldMap.h"
 #include "Common.h"
 #include "Branch.h"
+#include "Math.h"
 
 
 using namespace sf;
@@ -27,22 +28,30 @@ void WorldMap::Generate(int level)
 
 	int roomsToGenerate = RandomNumber(2 + level, 6 + level);
 
-	Vector2<int> dimensions = Vector2<int>(RandomNumber(10, 24),RandomNumber(10,24));
+	Vector2<int> dimensions = Vector2<int>(RandomNumber(Room::MinRoomWidth, Room::MaxRoomWidth),RandomNumber(Room::MinRoomHeight,Room::MaxRoomHeight));
 
 	TopRoom = make_shared<Room>(Vector2<int>(0,0),dimensions);
 
 	for (int i = 0; i < roomsToGenerate; i++)
 	{
 		TopRoom->AddRoomToHierarchy();
+
+		progress = Math::Lerp(0.0f, 0.9f, static_cast<float>(i) / static_cast<float>(roomsToGenerate - 1));
 	}
+
+	progress = 0.9f;
 
 	Flatten();
 
 	progress = 1.0f;
+
+	EnableRendering();
 }
 
 void WorldMap::Flatten()
 {
+	float previousProgress = progress;
+
 	Vector2<int> BottomLeft = {0,0};
 	Vector2<int> TopRight = {0,0};
 
@@ -59,7 +68,12 @@ void WorldMap::Flatten()
 	tiles = decltype(tiles)(Dimensions, nullptr);
 
 	auto rooms = TopRoom->GetAllConnectedRooms();
+	auto branches = TopRoom->GetAllConnectedBranches();
 
+	int loopCount = rooms.size() + branches.size();
+	int loopCounter = 0;
+
+	 tileSize = Vector2u(0, 0);
 
 	for (Room* room : rooms)
 	{
@@ -74,9 +88,9 @@ void WorldMap::Flatten()
 
 				auto& tile = room->GetTile(relativePos);
 
-				auto textureSize = tile->GetSprite().getTexture()->getSize();
+				tileSize = tile->GetSprite().getTexture()->getSize();
 
-				Vector2<float> tilePosition = Vector2<float>(static_cast<float>(layerPos.x * textureSize.x), static_cast<float>(layerPos.y * textureSize.y));
+				Vector2<float> tilePosition = Vector2<float>(static_cast<float>(layerPos.x * tileSize.x), static_cast<float>(layerPos.y * tileSize.y));
 
 				tile->GetSprite().setPosition(tilePosition);
 
@@ -88,10 +102,13 @@ void WorldMap::Flatten()
 		if (room == TopRoom.get())
 		{
 			SpawnPoint = (room->GetDimensions() / 2) + Vector2<int>(roomRect.left, roomRect.top - roomRect.height) - BottomLeft;
+			SpawnPoint = Vector2i(SpawnPoint.x * tileSize.x,SpawnPoint.y * tileSize.y);
 		}
+
+		progress = Math::Lerp(previousProgress,1.0f,static_cast<float>(++loopCounter) / static_cast<float>(loopCount));
 	}
 
-	for (Branch* branch : TopRoom->GetAllConnectedBranches())
+	for (Branch* branch : branches)
 	{
 		for (auto tile : branch->GetTiles())
 		{
@@ -105,16 +122,17 @@ void WorldMap::Flatten()
 
 			tiles[layerPos] = tile;
 		}
+		progress = Math::Lerp(previousProgress, 1.0f, static_cast<float>(++loopCounter) / static_cast<float>(loopCount));
 	}
 }
 
 WorldMap::WorldMap() :
 	progress(0.0f)
 {
-	
+
 }
 
-float WorldMap::GetProgress() const
+const atomic<float>& WorldMap::GetProgress() const
 {
 	return progress;
 }
@@ -124,6 +142,8 @@ void WorldMap::GenerateAsync(int level)
 	if (thread == nullptr)
 	{
 		thread = std::make_unique<std::thread>(&WorldMap::Generate, this, level);
+
+		thread->detach();
 	}
 }
 
@@ -135,6 +155,11 @@ int WorldMap::GetWidth() const
 int WorldMap::GetHeight() const
 {
 	return tiles.GetHeight();
+}
+
+sf::Vector2u WorldMap::GetTileSize() const
+{
+	return tileSize;
 }
 
 Vector2<int> WorldMap::GetSpawnPoint() const
@@ -149,7 +174,7 @@ void WorldMap::Render(RenderWindow& window) const
 	auto viewRect = Rect<int>((Vector2i(view.getCenter())), Vector2i(view.getSize()));
 
 
-	Vector2i textureSize = static_cast<Vector2i>(Common::Textures::blankTexture.GetTexture().getSize());
+	Vector2i textureSize = static_cast<Vector2i>(Common::Textures::centerPiece1.GetTexture().getSize());
 
 	auto mapView = Rect<int>(viewRect.left / textureSize.x, viewRect.top / textureSize.y, viewRect.width / textureSize.x, viewRect.height / textureSize.y);
 
@@ -213,4 +238,25 @@ BackgroundTile* WorldMap::GetTile(int x, int y) const
 BackgroundTile* WorldMap::operator[](Vector2<int> position) const
 {
 	return GetTile(position.x, position.y);
+}
+
+Array2D<BackgroundTile*> WorldMap::GetTilesWithinRect(sf::FloatRect rect) const
+{
+	Rect<int> area = Rect<int>(floorf(rect.left) / tileSize.x ,ceilf(rect.top) / tileSize.y,ceilf(rect.width) / tileSize.x,ceilf(rect.height) / tileSize.y );
+
+	Array2D<BackgroundTile*> grid{area.width,area.height,nullptr};
+
+	grid.SetOffset({area.left,(area.top - area.height)});
+
+	for (int x = area.left; x < area.left + area.width; x++)
+	{
+		for (int y = area.top - area.height; y < area.top; y++)
+		{
+			grid.Set(GetTile(x,y),x,y);
+		}
+	}
+
+	grid.SetOffset({ area.left * static_cast<int>(tileSize.x),(area.top - area.height)* static_cast<int>(tileSize.y) });
+
+	return grid;
 }

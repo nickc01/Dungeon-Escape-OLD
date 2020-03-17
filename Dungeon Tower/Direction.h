@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
 
 enum class Direction
 {
@@ -43,4 +44,39 @@ Direction RotateDirection(Direction source, type amount)
 
 	return static_cast<Direction>(static_cast<int>(numDirection));
 }
+
+Direction RandomDirection();
+Direction FlipDirection(Direction direction);
+
+template<typename VectorType>
+Direction DirectionFromVector(sf::Vector2<VectorType> vector)
+{
+	constexpr VectorType zero = static_cast<VectorType>(0);
+
+	if (vector.x == zero && vector.y > zero)
+	{
+		return Direction::Up;
+	}
+	else if (vector.x == zero && vector.y < zero)
+	{
+		return Direction::Down;
+	}
+	else if (vector.x > zero && vector.y == zero)
+	{
+		return Direction::Right;
+	}
+	else if (vector.x < zero && vector.y == zero)
+	{
+		return Direction::Left;
+	}
+
+	return Direction::Up;
+}
+
+template<typename NumType = int>
+NumType DirectionToDegrees(Direction direction)
+{
+	return static_cast<NumType>(static_cast<int>(direction));
+}
+
 

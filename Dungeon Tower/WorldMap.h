@@ -5,10 +5,12 @@
 #include <memory>
 #include <vector>
 #include "Room.h"
+#include "Renderable.h"
+#include <atomic>
 
-class WorldMap
+class WorldMap : public Renderable
 {
-	float progress;
+	std::atomic<float> progress;
 	std::shared_ptr<Room> TopRoom;
 
 	std::unique_ptr<std::thread> thread = nullptr;
@@ -17,12 +19,14 @@ class WorldMap
 
 	Array2D<std::shared_ptr<BackgroundTile>> tiles;
 
+	sf::Vector2u tileSize;
+
 	sf::Vector2<int> SpawnPoint;
 
 public:
 	WorldMap();
 
-	float GetProgress() const;
+	const std::atomic<float>& GetProgress() const;
 
 	//Generates the world map on a different thread. you can get the generation progress via GetProgress(). When GetProgress() equals 1, the map is done generating
 	void GenerateAsync(int level);
@@ -31,9 +35,17 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 
+	sf::Vector2u GetTileSize() const;
+
+	template<typename vectorType = float>
+	sf::Vector2<vectorType> GetDimensions()
+	{
+		return sf::Vector2<vectorType>(static_cast<vectorType>(GetWidth()), static_cast<vectorType>(GetHeight()));
+	}
+
 	sf::Vector2<int> GetSpawnPoint() const;
 
-	void Render(sf::RenderWindow& window) const;
+	virtual void Render(sf::RenderWindow& window) const override;
 
 	bool HasTile(int x, int y, BackgroundTile& output) const;
 	bool HasTile(int x, int y) const;
@@ -42,5 +54,7 @@ public:
 
 	BackgroundTile* GetTile(int x, int y) const;
 	BackgroundTile* operator[](sf::Vector2<int> position) const;
+
+	Array2D<BackgroundTile*> GetTilesWithinRect(sf::FloatRect rect) const;
 };
 

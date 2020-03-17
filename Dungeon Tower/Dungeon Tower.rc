@@ -50,11 +50,37 @@ END
 // PNG
 //
 
-BLANK_TILE              PNG                     "Blank.png"
+BOTTOM_LEFT_PIECE       PNG                     "Dungeon Tiles\\BottomLeftPiece.png"
 
-TOP_LEFT                PNG                     "TopLeftCorner.png"
+BOTTOM_PIECE            PNG                     "Dungeon Tiles\\BottomPiece.png"
 
-TOP_PIECE               PNG                     "TopPiece.png"
+BOTTOM_RIGHT_PIECE      PNG                     "Dungeon Tiles\\BottomRightPiece.png"
+
+LEFT_PIECE              PNG                     "Dungeon Tiles\\LeftPiece.png"
+
+RIGHT_PIECE             PNG                     "Dungeon Tiles\\RightPiece.png"
+
+TOP_LEFT_PIECE          PNG                     "Dungeon Tiles\\TopLeftPiece.png"
+
+TOP_PIECE               PNG                     "Dungeon Tiles\\TopPiece.png"
+
+TOP_RIGHT_PIECE         PNG                     "Dungeon Tiles\\TopRightPiece.png"
+
+CENTER_PIECE_1          PNG                     "Dungeon Tiles\\CenterPiece1.png"
+
+CENTER_PIECE_2          PNG                     "Dungeon Tiles\\CenterPiece2.png"
+
+BOTTOM_JOINT            PNG                     "Dungeon Tiles\\BottomJoint.png"
+
+LEFT_JOINT              PNG                     "Dungeon Tiles\\LeftJoint.png"
+
+RIGHT_JOINT             PNG                     "Dungeon Tiles\\RightJoint.png"
+
+TOP_JOINT               PNG                     "Dungeon Tiles\\TopJoint.png"
+
+PLAYER_TILE             PNG                     "Dungeon Tiles\\Player\\Player.png"
+
+PLAYER_SPRITE_SHEET     PNG                     "Dungeon Tiles\\Player\\PlayerMageSheet.png"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
