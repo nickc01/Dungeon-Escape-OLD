@@ -14,7 +14,7 @@ class Renderable : public ObjectManager<Renderable>
 
 public:
 
-	Renderable();
+	Renderable(bool renderingEnabled = true);
 
 	static const std::vector<Renderable*>& GetRenderables();
 

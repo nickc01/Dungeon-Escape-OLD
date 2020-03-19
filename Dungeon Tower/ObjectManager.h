@@ -69,28 +69,28 @@ public:
 	//Copy Constructor
 	ObjectManager(const ObjectManager<objectType>& source)
 	{
-		SetRenderingActive(source.inRenderableList);
+		SetActive(source.inList);
 	}
 
 	//Move Constructor
 	ObjectManager(ObjectManager<objectType>&& source)
 	{
-		SetRenderingActive(source.inRenderableList);
-		source.SetRenderingActive(false);
+		SetActive(source.inList);
+		source.SetActive(false);
 	}
 
 	//Copy Assignment
 	ObjectManager<objectType>& operator=(const ObjectManager<objectType>& source) noexcept
 	{
-		SetRenderingActive(source.inRenderableList);
+		SetActive(source.ineList);
 		return *this;
 
 	}
 	//Move Assignment
 	ObjectManager<objectType>& operator=(ObjectManager<objectType>&& source) noexcept
 	{
-		SetRenderingActive(source.inRenderableList);
-		source.SetRenderingActive(false);
+		SetActive(source.inList);
+		source.SetActive(false);
 		return *this;
 	}
 

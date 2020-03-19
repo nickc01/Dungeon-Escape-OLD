@@ -1,1 +1,5 @@
 Mage Sprites : https://opengameart.org/content/8x8-black-mage
+
+Other Sprites : https://opengameart.org/content/8x8-rogue-like-charenemiestiles
+
+Room Tiles : https://www.kenney.nl/assets/bit-pack

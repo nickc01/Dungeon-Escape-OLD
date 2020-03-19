@@ -77,10 +77,17 @@ int main()
 		{
 			auto lockObject = unique_lock<recursive_mutex>(Renderable::GetMutex());
 
-			for (const Renderable* renderObject : Renderable::GetRenderables())
+			auto& renderables = Renderable::GetRenderables();
+
+			for (int i = 0; i < renderables.size(); i++)
+			{
+				renderables[i]->Render(window);
+			}
+
+			/*for (const Renderable* renderObject : Renderable::GetRenderables())
 			{
 				renderObject->Render(window);
-			}
+			}*/
 		}
 
 		window.display();

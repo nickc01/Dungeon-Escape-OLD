@@ -7,8 +7,9 @@
 class UpdateReceiver : public ObjectManager<UpdateReceiver>
 {
 public:
-
 	UpdateReceiver(bool enabled = true);
+
+	void EnableUpdating(bool enabled = true);
 
 	static std::vector<UpdateReceiver*>& GetUpdatables();
 

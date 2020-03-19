@@ -88,7 +88,31 @@ void Room::AllAvailableBranches(std::vector<Branch*>& branches)
 	}
 }
 
-Room::Room(Vector2<int> center, Vector2<int> dimensions) :
+void Room::AddEnemySpawnpoint()
+{
+	while (true)
+	{
+		Vector2i spawnpoint = Vector2i(RandomNumber(1, GetWidth() - 1), RandomNumber(1, GetHeight() - 1));
+
+		bool added = false;
+
+		for (auto& point : enemySpawnPoints)
+		{
+			if (point == spawnpoint)
+			{
+				added = true;
+				break;
+			}
+		}
+		if (!added)
+		{
+			enemySpawnPoints.push_back(spawnpoint);
+			break;
+		}
+	}
+}
+
+Room::Room(Vector2<int> center, Vector2<int> dimensions, int enemySpawnPoints) :
 	Center(center), 
 	Dimensions(dimensions),
 	backgroundTiles(GetWidth(),GetHeight(),nullptr)
@@ -120,6 +144,11 @@ Room::Room(Vector2<int> center, Vector2<int> dimensions) :
 	backgroundTiles[{width - 1, 0}] = BackgroundTile::Create(Common::Sprites::topRightPiece);
 	backgroundTiles[{0, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomLeftPiece);
 	backgroundTiles[{width - 1, height - 1}] = BackgroundTile::Create(Common::Sprites::bottomRightPiece);
+
+	for (int i = 0; i < enemySpawnPoints; i++)
+	{
+		AddEnemySpawnpoint();
+	}
 }
 
 Rect<int> Room::GetRect() const
@@ -227,6 +256,16 @@ void Room::SetBranch(Direction direction, std::shared_ptr<Branch> branch)
 	default:
 		break;
 	}
+}
+
+const std::vector<sf::Vector2i>& Room::GetEnemySpawnPoints() const
+{
+	return enemySpawnPoints;
+}
+
+std::vector<sf::Vector2i>& Room::GetEnemySpawnPoints()
+{
+	return enemySpawnPoints;
 }
 
 bool Room::Intersects(const BackgroundTile& tile) const
@@ -416,9 +455,9 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 	}
 }
 
-void Room::AddRoomToHierarchy()
+void Room::AddRoomToHierarchy(int enemySpawnPoints)
 {
-	AddRoomToHierarchy(make_shared<Room>(Vector2<int>(0,0),Vector2<int>(RandomNumber(MinRoomWidth,MaxRoomWidth), RandomNumber(MinRoomHeight, MaxRoomHeight))));
+	AddRoomToHierarchy(make_shared<Room>(Vector2<int>(0,0),Vector2<int>(RandomNumber(MinRoomWidth,MaxRoomWidth), RandomNumber(MinRoomHeight, MaxRoomHeight)),enemySpawnPoints));
 }
 
 const std::vector<Room*> Room::GetAllConnectedRooms()

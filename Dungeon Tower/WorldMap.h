@@ -17,11 +17,15 @@ class WorldMap : public Renderable
 
 	void Flatten();
 
+	std::vector<sf::Vector2f> enemySpawnPoints{};
+
 	Array2D<std::shared_ptr<BackgroundTile>> tiles;
 
 	sf::Vector2u tileSize;
 
 	sf::Vector2<int> SpawnPoint;
+
+	int level = 0;
 
 public:
 	WorldMap();
@@ -44,11 +48,16 @@ public:
 	}
 
 	sf::Vector2<int> GetSpawnPoint() const;
+	const std::vector<sf::Vector2f>& GetEnemySpawnPoints() const;
+	std::vector<sf::Vector2f>& GetEnemySpawnPoints();
+	
 
 	virtual void Render(sf::RenderWindow& window) const override;
 
 	bool HasTile(int x, int y, BackgroundTile& output) const;
 	bool HasTile(int x, int y) const;
+
+	bool GetLevel() const;
 
 	bool IsWithinBounds(int x, int y) const;
 

@@ -6,6 +6,11 @@ UpdateReceiver::UpdateReceiver(bool enabled) :
 
 }
 
+void UpdateReceiver::EnableUpdating(bool enabled)
+{
+	SetActive(enabled);
+}
+
 std::vector<UpdateReceiver*>& UpdateReceiver::GetUpdatables()
 {
 	return ObjectManager<UpdateReceiver>::GetEventList();

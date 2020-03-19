@@ -24,6 +24,8 @@ namespace
 
 void WorldMap::Generate(int level)
 {
+	this->level = level;
+
 	progress = 0.0f;
 
 	int roomsToGenerate = RandomNumber(2 + level, 6 + level);
@@ -34,7 +36,7 @@ void WorldMap::Generate(int level)
 
 	for (int i = 0; i < roomsToGenerate; i++)
 	{
-		TopRoom->AddRoomToHierarchy();
+		TopRoom->AddRoomToHierarchy(RandomNumber(0,5));
 
 		progress = Math::Lerp(0.0f, 0.9f, static_cast<float>(i) / static_cast<float>(roomsToGenerate - 1));
 	}
@@ -79,12 +81,14 @@ void WorldMap::Flatten()
 	{
 		Rect<int> roomRect = room->GetRect();
 
+		Vector2i RoomBottomLeft = Vector2<int>(roomRect.left, roomRect.top - roomRect.height);
+
 		for (int x = 0; x < room->GetWidth(); x++)
 		{
 			for (int y = 0; y < room->GetHeight(); y++)
 			{
 				Vector2<int> relativePos = Vector2<int>(x, y);
-				Vector2<int> layerPos = relativePos + Vector2<int>(roomRect.left, roomRect.top - roomRect.height) - BottomLeft;
+				Vector2<int> layerPos = relativePos + RoomBottomLeft - BottomLeft;
 
 				auto& tile = room->GetTile(relativePos);
 
@@ -103,6 +107,11 @@ void WorldMap::Flatten()
 		{
 			SpawnPoint = (room->GetDimensions() / 2) + Vector2<int>(roomRect.left, roomRect.top - roomRect.height) - BottomLeft;
 			SpawnPoint = Vector2i(SpawnPoint.x * tileSize.x,SpawnPoint.y * tileSize.y);
+		}
+
+		for (auto& enemySpawnPoint : room->GetEnemySpawnPoints())
+		{
+			enemySpawnPoints.push_back(Vector2f((enemySpawnPoint.x + RoomBottomLeft.x - BottomLeft.x) * tileSize.x, (enemySpawnPoint.y + RoomBottomLeft.y - BottomLeft.y) * tileSize.y));
 		}
 
 		progress = Math::Lerp(previousProgress,1.0f,static_cast<float>(++loopCounter) / static_cast<float>(loopCount));
@@ -167,6 +176,16 @@ Vector2<int> WorldMap::GetSpawnPoint() const
 	return SpawnPoint;
 }
 
+const std::vector<sf::Vector2f>& WorldMap::GetEnemySpawnPoints() const
+{
+	return enemySpawnPoints;
+}
+
+std::vector<sf::Vector2f>& WorldMap::GetEnemySpawnPoints()
+{
+	return enemySpawnPoints;
+}
+
 void WorldMap::Render(RenderWindow& window) const
 {
 	auto view = window.getView();
@@ -216,6 +235,11 @@ bool WorldMap::HasTile(int x, int y, BackgroundTile& output) const
 bool WorldMap::HasTile(int x, int y) const
 {
 	return tiles.WithinBounds(x, y) && tiles.Get(x, y) != nullptr;
+}
+
+bool WorldMap::GetLevel() const
+{
+	return level;
 }
 
 bool WorldMap::IsWithinBounds(int x, int y) const

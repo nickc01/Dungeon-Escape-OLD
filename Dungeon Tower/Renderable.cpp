@@ -4,9 +4,13 @@
 
 std::atomic<bool> Renderable::listUpdated = false;
 
-Renderable::Renderable() :
-	ObjectManager<Renderable>(true)
+Renderable::Renderable(bool renderingEnabled) :
+	ObjectManager<Renderable>(renderingEnabled)
 {
+	if (renderingEnabled == true)
+	{
+		renderingEnabled = !(!(renderingEnabled));
+	}
 	listUpdated = true;
 }
 

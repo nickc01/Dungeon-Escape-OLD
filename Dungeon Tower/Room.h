@@ -24,6 +24,10 @@ class Room
 	void AllAvailableBranches(std::vector<Branch*>& branches);
 
 
+	std::vector<sf::Vector2i> enemySpawnPoints;
+
+	void AddEnemySpawnpoint();
+
 public:
 
 	static constexpr int MaxRoomWidth = 12;
@@ -32,7 +36,7 @@ public:
 	static constexpr int MinRoomWidth = 7;
 	static constexpr int MinRoomHeight = 7;
 
-	Room(sf::Vector2<int> center, sf::Vector2<int> dimensions);
+	Room(sf::Vector2<int> center, sf::Vector2<int> dimensions, int enemySpawnPoints = 0);
 
 	sf::Rect<int> GetRect() const;
 	sf::Vector2<int> GetCenter() const;
@@ -47,6 +51,9 @@ public:
 	std::array<std::shared_ptr<Branch>*,4> GetBranches();
 	std::vector<std::shared_ptr<Branch>*> GetEmptyBranches();
 	void SetBranch(Direction direction, std::shared_ptr<Branch> branch);
+
+	const std::vector<sf::Vector2i>& GetEnemySpawnPoints() const;
+	std::vector<sf::Vector2i>& GetEnemySpawnPoints();
 
 	bool Intersects(const BackgroundTile& tile) const;
 	bool Intersects(const Room& B) const;
@@ -63,7 +70,7 @@ public:
 	bool CheckForCollision(const Room* addedRoom);
 
 	void AddRoomToHierarchy(std::shared_ptr<Room> room);
-	void AddRoomToHierarchy();
+	void AddRoomToHierarchy(int enemySpawnPoints = 0);
 
 	const std::vector<Room*> GetAllConnectedRooms();
 	const std::vector<Branch*> GetAllConnectedBranches();

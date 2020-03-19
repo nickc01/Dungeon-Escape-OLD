@@ -5,6 +5,8 @@
 #include <tuple>
 #include <string>
 #include <iostream>
+#include <memory>
+#include <future>
 #include <limits>
 #include "Direction.h"
 
@@ -71,3 +73,15 @@ namespace Common
 void RefreshWindow(sf::RenderWindow& window = Common::MainWindow);
 void CenterCamera(sf::Vector2f center, sf::RenderWindow& window = Common::MainWindow);
 int RandomNumber(int minRange, int maxRange);
+
+template<typename futureType>
+bool IsFutureReady(const std::future<futureType>& future)
+{
+	return future.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+}
+
+template<typename futureType>
+bool IsFutureReady(const std::shared_ptr<std::future<futureType>>& future)
+{
+	return future->wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+}
