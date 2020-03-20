@@ -251,15 +251,6 @@ sf::Sprite Common::GetCornerSprite(Direction A, Direction B)
 
 bool Common::SpritesIntersect(const sf::Sprite& A, const sf::Sprite& B, Vector2f scaleFactor)
 {
-    if (scaleFactor.x < 0)
-    {
-        scaleFactor.x = A.getTextureRect().width;
-    }
-    if (scaleFactor.y < 0)
-    {
-        scaleFactor.y = B.getTextureRect().height;
-    }
-
     auto rectA = A.getGlobalBounds();
     auto rectB = B.getGlobalBounds();
 
@@ -286,11 +277,34 @@ bool Common::SpritesIntersect(const sf::Sprite& A, const sf::Sprite& B, Vector2f
     return false;
 }
 
+bool Common::SpritesIntersect(const sf::Sprite& A, const sf::Sprite& B)
+{
+    return Common::SpritesIntersect(A, B, { 1.0f,1.0f });
+}
+
+bool Common::SpritesIntersect(const sf::Sprite& A, const sf::Sprite& B, bool scaleByTextureSize)
+{
+    sf::Vector2f scaleFactor(1.0f, 1.0f);
+    if (scaleByTextureSize)
+    {
+        auto textureRect = A.getTextureRect();
+        scaleFactor.x = textureRect.width;
+        scaleFactor.y = textureRect.height;
+    }
+
+    return Common::SpritesIntersect(A, B, scaleFactor);
+}
+
 void RefreshWindow(sf::RenderWindow& window)
 {
     auto view = window.getView();
     view.setSize(static_cast<sf::Vector2f>(window.getSize() / 3u));
     window.setView(view);
+}
+
+sf::Vector2f GetMouseWorldCoordinates(sf::RenderWindow& window)
+{
+    return window.mapPixelToCoords(Mouse::getPosition() - window.getPosition());
 }
 
 void CenterCamera(Vector2f center, sf::RenderWindow& window)

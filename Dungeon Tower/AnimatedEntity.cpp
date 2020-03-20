@@ -13,8 +13,8 @@ void AnimatedEntity::SetAnimatedSprite()
 	}
 }
 
-AnimatedEntity::AnimatedEntity(const WorldMap& map, bool pingPongAnimation, float animationSpeed, bool enableRendering, bool enableUpdating) :
-	Entity(map,enableRendering,enableUpdating),
+AnimatedEntity::AnimatedEntity(const WorldMap& map, bool pingPongAnimation, float animationSpeed, bool enableCollision) :
+	Entity(map,enableCollision),
 	animationSpeed(animationSpeed),
 	PingPong(pingPongAnimation)
 {

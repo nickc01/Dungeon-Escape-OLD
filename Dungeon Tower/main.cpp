@@ -51,10 +51,15 @@ int main()
 		auto dt = clock.restart();
 		{
 			auto lockObject = unique_lock<recursive_mutex>(UpdateReceiver::GetMutex());
-			for (UpdateReceiver* updatable : UpdateReceiver::GetUpdatables())
+			auto updatables = UpdateReceiver::GetUpdatables();
+			for (auto i = updatables.rbegin(); i != updatables.rend(); i++)
+			{
+				(**i).Update(dt);
+			}
+			/*for (UpdateReceiver* updatable : UpdateReceiver::GetUpdatables())
 			{
 				updatable->Update(dt);
-			}
+			}*/
 		}
 
 

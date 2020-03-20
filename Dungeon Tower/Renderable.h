@@ -14,7 +14,7 @@ class Renderable : public ObjectManager<Renderable>
 
 public:
 
-	Renderable(bool renderingEnabled = true);
+	Renderable(bool renderingEnabled = false);
 
 	static const std::vector<Renderable*>& GetRenderables();
 
@@ -23,7 +23,7 @@ public:
 	int GetRenderLayer() const;
 	void SetRenderLayer(int newLayer);
 
-	virtual void Render(sf::RenderWindow& window) const = 0;
+	virtual void Render(sf::RenderWindow& window) = 0;
 
 
 	virtual ~Renderable();

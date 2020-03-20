@@ -25,10 +25,10 @@ struct PathAsyncResult
 
 
 
-class Enemy : public AnimatedEntity
+class Enemy : public AnimatedEntity, public ObjectManager<Enemy>
 {
-	const WorldMap& map;
-	int Strength = 1;
+	//const WorldMap& map;
+	//int Strength = 1;
 
 protected:
 	PathResult GeneratePathToPlayer();
@@ -36,9 +36,12 @@ protected:
 
 public:
 
-	int GetStrength() const;
+	static const std::vector<Enemy*>& GetAllEnemies();
+	static std::recursive_mutex& GetEnemyListMutex();
 
-	Enemy(const WorldMap& map, int strength = 1, bool enableUpdating = true, bool enableRendering = true);
+	//int GetStrength() const;
+
+	Enemy(const WorldMap& map,bool enableCollision = true);
 
 	// Inherited via AnimatedEntity
 	virtual void Update(sf::Time dt) override = 0;

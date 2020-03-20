@@ -19,6 +19,15 @@
     <Filter Include="Resource Files\Dungeon Tiles\Player">
       <UniqueIdentifier>{e7471680-1d08-4be8-aa43-ff5198804bf7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Dungeon Tiles\Enemies">
+      <UniqueIdentifier>{45dddfbe-26e6-448d-8c38-64c61a660a02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Dungeon Tiles\Enemies\Skeleton">
+      <UniqueIdentifier>{73dee92d-9951-4c7a-83fc-b220cdcc9ab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Dungeon Tiles\Misc">
+      <UniqueIdentifier>{7b8c38f2-3123-454c-9e8c-0f41990bdc4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,13 +81,19 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyMage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SkeletonEnemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ThreadPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeartDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicOrb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -140,13 +155,19 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyMage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SkeletonEnemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ThreadPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeartDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicOrb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -204,11 +225,14 @@
     <Image Include="Dungeon Tiles\Player\PlayerMageSheet.png">
       <Filter>Resource Files\Dungeon Tiles\Player</Filter>
     </Image>
-    <Image Include="Dungeon Tiles\Enemies\Enemy Mage\enemyMageSheet.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Dungeon Tiles\Enemies\Skeleton\SkeletonSheet.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Dungeon Tiles\Enemies\Skeleton</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\Misc\PowerOrb.png">
+      <Filter>Resource Files\Dungeon Tiles\Misc</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\Misc\Heart.png">
+      <Filter>Resource Files\Dungeon Tiles\Misc</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -19,6 +19,8 @@ class WorldMap : public Renderable
 
 	std::vector<sf::Vector2f> enemySpawnPoints{};
 
+	sf::Vector2f doorLocation;
+
 	Array2D<std::shared_ptr<BackgroundTile>> tiles;
 
 	sf::Vector2u tileSize;
@@ -50,9 +52,11 @@ public:
 	sf::Vector2<int> GetSpawnPoint() const;
 	const std::vector<sf::Vector2f>& GetEnemySpawnPoints() const;
 	std::vector<sf::Vector2f>& GetEnemySpawnPoints();
+
+	sf::Vector2f GetDoorLocation() const;
 	
 
-	virtual void Render(sf::RenderWindow& window) const override;
+	virtual void Render(sf::RenderWindow& window) override;
 
 	bool HasTile(int x, int y, BackgroundTile& output) const;
 	bool HasTile(int x, int y) const;

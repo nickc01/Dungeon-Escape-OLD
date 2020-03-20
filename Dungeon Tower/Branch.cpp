@@ -223,7 +223,7 @@ bool Branch::Intersects(Branch& other)
 			{
 				continue;
 			}
-			else if (Common::SpritesIntersect(tileA->GetSprite(),tileB->GetSprite()))
+			else if (Common::SpritesIntersect(tileA->GetSprite(),tileB->GetSprite(),true))
 			{
 				return true;
 			}

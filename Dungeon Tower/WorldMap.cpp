@@ -36,7 +36,7 @@ void WorldMap::Generate(int level)
 
 	for (int i = 0; i < roomsToGenerate; i++)
 	{
-		TopRoom->AddRoomToHierarchy(RandomNumber(0,5));
+		TopRoom->AddRoomToHierarchy(RandomNumber(0,8));
 
 		progress = Math::Lerp(0.0f, 0.9f, static_cast<float>(i) / static_cast<float>(roomsToGenerate - 1));
 	}
@@ -54,18 +54,18 @@ void WorldMap::Flatten()
 {
 	float previousProgress = progress;
 
-	Vector2<int> BottomLeft = {0,0};
-	Vector2<int> TopRight = {0,0};
+	Vector2<int> BottomLeft = { 0,0 };
+	Vector2<int> TopRight = { 0,0 };
 
 	for (Room* room : TopRoom->GetAllConnectedRooms())
 	{
 		Rect<int> roomRect = room->GetRect();
 
-		BottomLeft = SmallestParts(BottomLeft, {roomRect.left,roomRect.top - roomRect.height});
-		TopRight = GreatestParts(TopRight, {roomRect.left + roomRect.width,roomRect.top});
+		BottomLeft = SmallestParts(BottomLeft, { roomRect.left,roomRect.top - roomRect.height });
+		TopRight = GreatestParts(TopRight, { roomRect.left + roomRect.width,roomRect.top });
 	}
 
-	Vector2<int> Dimensions = TopRight - BottomLeft + Vector2<int>(1,1);
+	Vector2<int> Dimensions = TopRight - BottomLeft + Vector2<int>(1, 1);
 
 	tiles = decltype(tiles)(Dimensions, nullptr);
 
@@ -75,7 +75,7 @@ void WorldMap::Flatten()
 	int loopCount = rooms.size() + branches.size();
 	int loopCounter = 0;
 
-	 tileSize = Vector2u(0, 0);
+	tileSize = Vector2u(0, 0);
 
 	for (Room* room : rooms)
 	{
@@ -106,7 +106,7 @@ void WorldMap::Flatten()
 		if (room == TopRoom.get())
 		{
 			SpawnPoint = (room->GetDimensions() / 2) + Vector2<int>(roomRect.left, roomRect.top - roomRect.height) - BottomLeft;
-			SpawnPoint = Vector2i(SpawnPoint.x * tileSize.x,SpawnPoint.y * tileSize.y);
+			SpawnPoint = Vector2i(SpawnPoint.x * tileSize.x, SpawnPoint.y * tileSize.y);
 		}
 
 		for (auto& enemySpawnPoint : room->GetEnemySpawnPoints())
@@ -114,7 +114,7 @@ void WorldMap::Flatten()
 			enemySpawnPoints.push_back(Vector2f((enemySpawnPoint.x + RoomBottomLeft.x - BottomLeft.x) * tileSize.x, (enemySpawnPoint.y + RoomBottomLeft.y - BottomLeft.y) * tileSize.y));
 		}
 
-		progress = Math::Lerp(previousProgress,1.0f,static_cast<float>(++loopCounter) / static_cast<float>(loopCount));
+		progress = Math::Lerp(previousProgress, 1.0f, static_cast<float>(++loopCounter) / static_cast<float>(loopCount));
 	}
 
 	for (Branch* branch : branches)
@@ -133,6 +133,19 @@ void WorldMap::Flatten()
 		}
 		progress = Math::Lerp(previousProgress, 1.0f, static_cast<float>(++loopCounter) / static_cast<float>(loopCount));
 	}
+
+	int randomRoomNumber = RandomNumber(1, rooms.size());
+
+	Room* doorRoom = rooms[randomRoomNumber];
+
+	Rect<int> doorRoomRect = doorRoom->GetRect();
+
+	Vector2i doorRoomBottomLeft = Vector2<int>(doorRoomRect.left, doorRoomRect.top - doorRoomRect.height);
+
+	int doorX = RandomNumber(1, doorRoom->GetWidth() - 2);
+	int doorY = RandomNumber(1, doorRoom->GetHeight() - 2);
+
+	doorLocation = {(doorX + doorRoomBottomLeft.x + BottomLeft.x) * tileSize.x, (doorY + doorRoomBottomLeft.y + BottomLeft.y) * tileSize.y};
 }
 
 WorldMap::WorldMap() :
@@ -186,7 +199,12 @@ std::vector<sf::Vector2f>& WorldMap::GetEnemySpawnPoints()
 	return enemySpawnPoints;
 }
 
-void WorldMap::Render(RenderWindow& window) const
+sf::Vector2f WorldMap::GetDoorLocation() const
+{
+	return doorLocation;
+}
+
+void WorldMap::Render(RenderWindow& window)
 {
 	auto view = window.getView();
 

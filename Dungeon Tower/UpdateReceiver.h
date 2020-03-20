@@ -7,7 +7,7 @@
 class UpdateReceiver : public ObjectManager<UpdateReceiver>
 {
 public:
-	UpdateReceiver(bool enabled = true);
+	UpdateReceiver(bool enabled = false);
 
 	void EnableUpdating(bool enabled = true);
 

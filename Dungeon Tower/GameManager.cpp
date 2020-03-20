@@ -5,6 +5,7 @@
 #include <thread>
 #include "SkeletonEnemy.h"
 #include "ThreadPool.h"
+#include "HeartDisplay.h"
 
 using namespace std;
 using namespace sf;
@@ -17,7 +18,7 @@ void GameManager::StartGame()
 	ThreadPool::Start();
 	WorldMap map{};
 
-	map.GenerateAsync(200);
+	map.GenerateAsync(20);
 
 	while (true)
 	{
@@ -36,6 +37,8 @@ void GameManager::StartGame()
 	//shared_ptr<SkeletonEnemy> testSkeleton = nullptr;
 
 	Player player(map, static_cast<Vector2f>(map.GetSpawnPoint()));
+
+	HeartDisplay display = HeartDisplay(player);
 
 	{
 		unique_lock<recursive_mutex> lock(ObjectManager<Renderable>::GetMutex());

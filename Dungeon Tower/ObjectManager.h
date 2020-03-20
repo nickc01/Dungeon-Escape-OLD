@@ -11,23 +11,23 @@
 
 
 
-template<typename objectType>
+template<typename objectType,typename MutexType = std::recursive_mutex>
 class ObjectManager
 {
 
 	static std::vector<objectType*> list;
-	static std::recursive_mutex listLock;
+	static MutexType listLock;
 
 	bool inList;
 
 	static void AddToList(objectType* object)
 	{
-		auto lockObject = std::unique_lock<std::recursive_mutex>(listLock);
+		auto lockObject = std::unique_lock<MutexType>(listLock);
 		list.push_back(object);
 	}
 	static void RemoveFromList(objectType* object)
 	{
-		auto lockObject = std::unique_lock<std::recursive_mutex>(listLock);
+		auto lockObject = std::unique_lock<MutexType>(listLock);
 		list.erase(std::remove(begin(list),end(list),object),end(list));
 	}
 
@@ -109,8 +109,8 @@ public:
 
 };
 
-template<typename objectType>
-std::vector<objectType*> ObjectManager<objectType>::list{};
+template<typename objectType,typename MutexType>
+std::vector<objectType*> ObjectManager<objectType,MutexType>::list{};
 
-template<typename objectType>
-std::recursive_mutex ObjectManager<objectType>::listLock{};
+template<typename objectType,typename MutexType>
+MutexType ObjectManager<objectType,MutexType>::listLock{};

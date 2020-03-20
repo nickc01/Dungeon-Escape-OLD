@@ -67,10 +67,13 @@ namespace Common
 	sf::Sprite GetSideSprite(Direction side);
 	sf::Sprite GetCornerSprite(Direction A, Direction B);
 
-	bool SpritesIntersect(const sf::Sprite& A, const sf::Sprite& B, sf::Vector2f scaleFactor = {-1.0f,-1.0f});
+	bool SpritesIntersect(const sf::Sprite& A, const sf::Sprite& B, sf::Vector2f scaleFactor);
+	bool SpritesIntersect(const sf::Sprite& A, const sf::Sprite& B);
+	bool SpritesIntersect(const sf::Sprite& A, const sf::Sprite& B, bool scaleByTextureSize);
 }
 
 void RefreshWindow(sf::RenderWindow& window = Common::MainWindow);
+sf::Vector2f GetMouseWorldCoordinates(sf::RenderWindow& window = Common::MainWindow);
 void CenterCamera(sf::Vector2f center, sf::RenderWindow& window = Common::MainWindow);
 int RandomNumber(int minRange, int maxRange);
 

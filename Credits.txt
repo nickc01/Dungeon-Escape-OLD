@@ -3,3 +3,7 @@ Mage Sprites : https://opengameart.org/content/8x8-black-mage
 Other Sprites : https://opengameart.org/content/8x8-rogue-like-charenemiestiles
 
 Room Tiles : https://www.kenney.nl/assets/bit-pack
+
+Heart Image : https://opengameart.org/content/heart2-1616
+
+Font : https://www.1001fonts.com/origami-mommy-font.html

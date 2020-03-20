@@ -18,15 +18,16 @@
 #define TOP_JOINT                       122
 #define PLAYER_TILE                     123
 #define PLAYER_SPRITE_SHEET             124
-#define ENEMY_MAGE_SHEET                125
-#define IDB_PNG2                        126
 #define SKELETON_SHEET                  126
+#define HEART_SPRITE                    127
+#define IDB_PNG1                        128
+#define POWER_ORB                       128
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        127
+#define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

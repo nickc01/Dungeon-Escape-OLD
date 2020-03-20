@@ -13,17 +13,24 @@ class Player : public AnimatedEntity
 	static Player* currentPlayer;
 
 	static ResourceTexture playerSpriteSheet;
-	bool alive = true;
+	//bool alive = true;
 	bool moving = false;
+
+	bool invincible = false;
+	float invincibilityTimer = 0.0f;
+	float flickerTimer = 0.0f;
+	float orbSpawnTimer = 0.0f;
 
 	Direction travelDirection = Direction::Up;
 
+
+	int health = 5;
 
 	void UpdateSprite();
 
 public:
 
-	static const Player* GetCurrentPlayer();
+	static Player* GetCurrentPlayer();
 
 
 	Player(const WorldMap& map, sf::Vector2f spawnPoint);
@@ -36,6 +43,11 @@ public:
 
 	Direction GetPlayerDirection() const;
 	bool IsMoving() const;
+
+	int GetHealth() const;
+	void TakeHit();
+
+	bool IsAlive() const;
 
 
 

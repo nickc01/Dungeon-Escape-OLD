@@ -21,7 +21,7 @@ class AnimatedEntity : public Entity
 
 public:
 
-	AnimatedEntity(const WorldMap& map, bool pingPongAnimation = true, float animationSpeed = 1.0f / 12.0f, bool enableRendering = true, bool enableUpdating = true);
+	AnimatedEntity(const WorldMap& map, bool pingPongAnimation = true, float animationSpeed = 1.0f / 12.0f, bool enableCollision = true);
 
 	void UpdateAnimations(sf::Time dt);
 	void SetSpriteGroup(std::string spriteGroup);

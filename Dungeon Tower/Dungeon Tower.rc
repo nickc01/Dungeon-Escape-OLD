@@ -82,9 +82,11 @@ PLAYER_TILE             PNG                     "Dungeon Tiles\\Player\\Player.p
 
 PLAYER_SPRITE_SHEET     PNG                     "Dungeon Tiles\\Player\\PlayerMageSheet.png"
 
-ENEMY_MAGE_SHEET        PNG                     "Dungeon Tiles\\Enemies\\Enemy Mage\\enemyMageSheet.png"
-
 SKELETON_SHEET          PNG                     "Dungeon Tiles\\Enemies\\Skeleton\\SkeletonSheet.png"
+
+HEART_SPRITE            PNG                     "Dungeon Tiles\\Misc\\Heart.png"
+
+POWER_ORB               PNG                     "Dungeon Tiles\\Misc\\PowerOrb.png"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

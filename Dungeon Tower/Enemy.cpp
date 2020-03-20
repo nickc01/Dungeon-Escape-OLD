@@ -52,7 +52,7 @@ namespace
 PathResult Enemy::GeneratePathToPlayer()
 {
 	const Player* player = Player::GetCurrentPlayer();
-	if (player == nullptr)
+	if (GetSprite() == nullptr || player == nullptr || !player->IsAlive() || player->GetSprite() == nullptr)
 	{
 		return PathResult();
 	}
@@ -60,7 +60,7 @@ PathResult Enemy::GeneratePathToPlayer()
 	auto playerPos = player->GetSprite()->getPosition();
 	auto enemyPos = GetSprite()->getPosition();
 
-	auto mapTileSize = map.GetTileSize();
+	auto mapTileSize = GetMap().GetTileSize();
 
 	Vector2i target = Vector2i(playerPos.x / mapTileSize.x,playerPos.y / mapTileSize.y);
 	Vector2i source = Vector2i(enemyPos.x / mapTileSize.x, enemyPos.y / mapTileSize.y);
@@ -94,7 +94,7 @@ PathResult Enemy::GeneratePathToPlayer()
 		OpenList.pop_back();
 		ClosedList.push_back(currentTile);
 
-		for (auto& neighbor : GetNeighboringTiles(map, currentTile->MapPosition))
+		for (auto& neighbor : GetNeighboringTiles(GetMap(), currentTile->MapPosition))
 		{
 			BackgroundTile* tile = get<0>(neighbor);
 			Vector2i tilePosition = get<1>(neighbor);
@@ -169,15 +169,19 @@ std::shared_ptr<PathAsyncResult> Enemy::GeneratePathToPlayerAsync()
 		});*/
 }
 
-int Enemy::GetStrength() const
+const std::vector<Enemy*>& Enemy::GetAllEnemies()
 {
-	return Strength;
+	return ObjectManager<Enemy>::GetEventList();
 }
 
-Enemy::Enemy(const WorldMap& map, int strength, bool enableRendering, bool enableCollision) :
-	AnimatedEntity(map,true,1.0f / 12.0f, enableRendering, enableCollision),
-	map(map),
-	Strength(strength)
+std::recursive_mutex& Enemy::GetEnemyListMutex()
+{
+	return ObjectManager<Enemy>::GetMutex();
+}
+
+
+Enemy::Enemy(const WorldMap& map, bool enableCollision) :
+	AnimatedEntity(map,true,1.0f / 12.0f,enableCollision)
 {
 
 }
