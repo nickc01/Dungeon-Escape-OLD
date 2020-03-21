@@ -36,7 +36,7 @@ void WorldMap::Generate(int level)
 
 	for (int i = 0; i < roomsToGenerate; i++)
 	{
-		TopRoom->AddRoomToHierarchy(RandomNumber(0,8));
+		TopRoom->AddRoomToHierarchy(RandomNumber(0,15));
 
 		progress = Math::Lerp(0.0f, 0.9f, static_cast<float>(i) / static_cast<float>(roomsToGenerate - 1));
 	}
@@ -45,6 +45,7 @@ void WorldMap::Generate(int level)
 
 	Flatten();
 
+	//progress = 9.99f;
 	progress = 1.0f;
 
 	EnableRendering();
@@ -145,7 +146,9 @@ void WorldMap::Flatten()
 	int doorX = RandomNumber(1, doorRoom->GetWidth() - 2);
 	int doorY = RandomNumber(1, doorRoom->GetHeight() - 2);
 
-	doorLocation = {(doorX + doorRoomBottomLeft.x + BottomLeft.x) * tileSize.x, (doorY + doorRoomBottomLeft.y + BottomLeft.y) * tileSize.y};
+	auto xtest = (doorX + doorRoomBottomLeft.x + BottomLeft.x) * static_cast<float>(tileSize.x);
+
+	doorLocation = Vector2f((doorX + doorRoomBottomLeft.x - BottomLeft.x) * static_cast<float>(tileSize.x), (doorY + doorRoomBottomLeft.y - BottomLeft.y) * static_cast<float>(tileSize.y));
 }
 
 WorldMap::WorldMap() :
@@ -301,4 +304,9 @@ Array2D<BackgroundTile*> WorldMap::GetTilesWithinRect(sf::FloatRect rect) const
 	grid.SetOffset({ area.left * static_cast<int>(tileSize.x),(area.top - area.height)* static_cast<int>(tileSize.y) });
 
 	return grid;
+}
+
+WorldMap::~WorldMap()
+{
+	EnableRendering(false);
 }

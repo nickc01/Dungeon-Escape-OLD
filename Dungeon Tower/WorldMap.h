@@ -69,5 +69,8 @@ public:
 	BackgroundTile* operator[](sf::Vector2<int> position) const;
 
 	Array2D<BackgroundTile*> GetTilesWithinRect(sf::FloatRect rect) const;
+
+
+	virtual ~WorldMap();
 };
 

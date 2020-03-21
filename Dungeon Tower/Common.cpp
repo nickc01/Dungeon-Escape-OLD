@@ -77,7 +77,7 @@ namespace Common
         ResourceTexture leftPiece{LEFT_PIECE};
     }
 
-    RenderWindow MainWindow(VideoMode(800, 600), "This is a test");
+    RenderWindow MainWindow(VideoMode(800, 600), "Dungeon Escape");
 }
 
 

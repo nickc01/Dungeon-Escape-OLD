@@ -23,6 +23,23 @@ ResourceFile::ResourceFile(int resource_ID, const std::string resource_class)
     data = LockResource(hMemory);
 }
 
+ResourceFile::ResourceFile(int resource_ID, decltype(RT_RCDATA) resource_Class)
+{
+    hResource = FindResource(nullptr, MAKEINTRESOURCE(resource_ID), resource_Class);
+    if (hResource == 0)
+    {
+        throw std::exception("Unable to load resource");
+    }
+    hMemory = LoadResource(nullptr, hResource);
+
+    sizeBytes = SizeofResource(nullptr, hResource);
+    if (hMemory == 0)
+    {
+        throw std::exception("Unable to load resource");
+    }
+    data = LockResource(hMemory);
+}
+
 ResourceFile::ResourceFile()
 {
 

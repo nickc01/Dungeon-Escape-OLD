@@ -24,6 +24,7 @@ class Player : public AnimatedEntity
 	Direction travelDirection = Direction::Up;
 
 
+	bool reachedDoor = false;
 	int health = 5;
 
 	void UpdateSprite();
@@ -48,6 +49,7 @@ public:
 	void TakeHit();
 
 	bool IsAlive() const;
+	bool ReachedTheDoor() const;
 
 
 

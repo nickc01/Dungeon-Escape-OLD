@@ -169,18 +169,22 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <ClCompile Include="BackgroundTile.cpp" />
     <ClCompile Include="Branch.cpp" />
     <ClCompile Include="Common.cpp" />
+    <ClCompile Include="DialogBoxSprite.cpp" />
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameText.cpp" />
     <ClCompile Include="HeartDisplay.cpp" />
     <ClCompile Include="MagicOrb.cpp" />
+    <ClCompile Include="MainMenuBackground.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ResourceFile.cpp" />
+    <ClCompile Include="ResourceFont.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="SkeletonEnemy.cpp" />
@@ -194,19 +198,23 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <ClInclude Include="BackgroundTile.h" />
     <ClInclude Include="Branch.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="DialogBoxSprite.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameText.h" />
     <ClInclude Include="HeartDisplay.h" />
     <ClInclude Include="MagicOrb.h" />
+    <ClInclude Include="MainMenuBackground.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceFile.h" />
+    <ClInclude Include="ResourceFont.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="SkeletonEnemy.h" />
@@ -227,6 +235,9 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <Image Include="Dungeon Tiles\Enemies\Skeleton\SkeletonSheet.png" />
     <Image Include="Dungeon Tiles\LeftJoint.png" />
     <Image Include="Dungeon Tiles\LeftPiece.png" />
+    <Image Include="Dungeon Tiles\Misc\BackgroundTiles.png" />
+    <Image Include="Dungeon Tiles\Misc\DialogBox.png" />
+    <Image Include="Dungeon Tiles\Misc\Door.png" />
     <Image Include="Dungeon Tiles\Misc\Heart.png" />
     <Image Include="Dungeon Tiles\Misc\PowerOrb.png" />
     <Image Include="Dungeon Tiles\Player\Player.png" />
@@ -237,6 +248,9 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <Image Include="Dungeon Tiles\TopLeftPiece.png" />
     <Image Include="Dungeon Tiles\TopPiece.png" />
     <Image Include="Dungeon Tiles\TopRightPiece.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Fonts\Squares Bold Free.otf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

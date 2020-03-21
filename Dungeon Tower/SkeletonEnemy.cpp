@@ -9,7 +9,7 @@ using namespace sf;
 
 namespace
 {
-	constexpr float REFRESH_TIME = 2.5f;
+	constexpr float REFRESH_TIME = 1.0f;
 	constexpr float STUN_DECELERATION_SPEED = 40.0f;
 	constexpr float STUN_DURATION = 1.5f;
 	constexpr float STUN_FORCE = 60.0f;

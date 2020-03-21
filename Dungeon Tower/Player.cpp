@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Math.h"
 #include "MagicOrb.h"
+#include "Door.h"
 
 
 using namespace std;
@@ -108,7 +109,7 @@ void Player::TakeHit()
 		health--;
 		if (health == 0)
 		{
-			SetSprite(nullptr);
+			EnableRendering(false);
 			return;
 		}
 		invincible = true;
@@ -120,12 +121,17 @@ void Player::TakeHit()
 
 bool Player::IsAlive() const
 {
-	return health > 0;
+	return health > 0 && reachedDoor == false;
+}
+
+bool Player::ReachedTheDoor() const
+{
+	return reachedDoor;
 }
 
 void Player::Update(sf::Time dt)
 {
-	if (!IsAlive())
+	if (!IsAlive() || reachedDoor)
 	{
 		return;
 	}
@@ -162,38 +168,43 @@ void Player::Update(sf::Time dt)
 
 	if (Keyboard::isKeyPressed(Keyboard::Key::Up) || Keyboard::isKeyPressed(Keyboard::Key::W))
 	{
-		Move(0.0f,-64.0f * time);
+		Move(0.0f,-60.0f * time);
 		travelDirection = Direction::Up;
 		isMoving = true;
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::Key::Down) || Keyboard::isKeyPressed(Keyboard::Key::S))
 	{
-		Move(0.0f, 64.0f * time);
+		Move(0.0f, 60.0f * time);
 		travelDirection = Direction::Down;
 		isMoving = true;
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::Key::Right) || Keyboard::isKeyPressed(Keyboard::Key::D))
 	{
-		Move(64.0f * time, 0.0f);
+		Move(60.0f * time, 0.0f);
 		travelDirection = Direction::Right;
 		isMoving = true;
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::Key::Left) || Keyboard::isKeyPressed(Keyboard::Key::A))
 	{
-		Move(-64.0f * time, 0.0f);
+		Move(-60.0f * time, 0.0f);
 		travelDirection = Direction::Left;
 		isMoving = true;
 	}
 
 	if (orbSpawnTimer <= 0.0f)
 	{
-		if (Keyboard::isKeyPressed(Keyboard::Key::Space) || Mouse::isButtonPressed(Mouse::Left))
+		if (Mouse::isButtonPressed(Mouse::Left))
 		{
 			orbSpawnTimer = ORB_SPAWN_RATE;
 			MagicOrb::Fire(GetMap(), GetSprite()->getPosition(), GetMouseWorldCoordinates() - GetSprite()->getPosition());
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Key::Space))
+		{
+			orbSpawnTimer = ORB_SPAWN_RATE;
+			MagicOrb::Fire(GetMap(), GetSprite()->getPosition(), travelDirection);
 		}
 	}
 	else
@@ -207,6 +218,12 @@ void Player::Update(sf::Time dt)
 	{
 		UpdateSprite();
 		UpdateAnimations(dt);
+	}
+
+	if (Math::SpritesIntersect(*GetSprite(),Door::GetDoor()->GetSprite()))
+	{
+		reachedDoor = true;
+		EnableRendering(false);
 	}
 }
 

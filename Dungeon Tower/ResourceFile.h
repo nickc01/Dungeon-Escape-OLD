@@ -20,6 +20,7 @@ class ResourceFile
 public:
 
 	ResourceFile(int resource_ID, const std::string resource_class);
+	ResourceFile(int resource_ID, decltype(RT_RCDATA) test);
 	ResourceFile();
 
 	size_t GetDataSize() const;

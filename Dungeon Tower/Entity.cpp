@@ -456,6 +456,11 @@ const WorldMap& Entity::GetMap() const
 	return map;
 }
 
+Entity::~Entity()
+{
+	EnableRendering(false);
+}
+
 
 
 

@@ -19,7 +19,11 @@ namespace
 
 void ThreadPool::Start()
 {
-	poolThread = thread(ThreadPoolMain);
+	if (!running)
+	{
+		running = true;
+		poolThread = thread(ThreadPoolMain);
+	}
 }
 
 void ThreadPool::AddToQueue(std::function<void()>&& func)
@@ -31,8 +35,11 @@ void ThreadPool::AddToQueue(std::function<void()>&& func)
 
 void ThreadPool::Stop()
 {
-	running = false;
-	poolThread.join();
+	if (running)
+	{
+		running = false;
+		poolThread.join();
+	}
 }
 
 
@@ -41,8 +48,6 @@ namespace
 {
 	void ThreadPoolMain()
 	{
-		running = true;
-
 		while (true)
 		{
 			if (running == false)

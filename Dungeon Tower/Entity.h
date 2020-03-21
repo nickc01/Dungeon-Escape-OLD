@@ -55,5 +55,7 @@ public:
 
 	const WorldMap& GetMap() const;
 
+	virtual ~Entity();
+
 };
 

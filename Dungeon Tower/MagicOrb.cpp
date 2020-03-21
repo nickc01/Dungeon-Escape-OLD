@@ -9,7 +9,7 @@ using namespace sf;
 
 namespace
 {
-	constexpr float TRAVEL_SPEED = 50.0f;
+	constexpr float TRAVEL_SPEED = 75.0f;
 	constexpr float SPAWN_INVINCIBILITY_TIME = 0.2f;
 	constexpr float LIFETIME = 3.0f;
 }
@@ -30,6 +30,10 @@ MagicOrb::MagicOrb(const WorldMap& map, Vector2f spawnPoint, Vector2f direction)
 	orbSprite.setOrigin(Vector2f(textureSize.x / 2u,textureSize.y / 2u));
 	orbSprite.setPosition(spawnPoint);
 	SetSprite(&orbSprite);
+
+	SetRenderLayer(200);
+
+	orbSprite.setColor({ 255,255,255,128 });
 
 	auto spriteBounds = GetSprite()->getLocalBounds();
 	//SetHitbox({ spriteBounds.left - 3, spriteBounds.top + 3,spriteBounds.width + 3,spriteBounds.height + 3 });
@@ -59,7 +63,11 @@ std::shared_ptr<MagicOrb> MagicOrb::Fire(const WorldMap& map, sf::Vector2f spawn
 
 std::shared_ptr<MagicOrb> MagicOrb::Fire(const WorldMap& map, sf::Vector2f spawnPoint, Direction direction)
 {
-	return Fire(map, spawnPoint, VectorInDirection<float>(direction, 1.0f));
+	auto vectorDirection = VectorInDirection<float>(direction, 1.0f);
+
+	vectorDirection.y = -vectorDirection.y;
+
+	return Fire(map, spawnPoint, vectorDirection);
 }
 
 void MagicOrb::Destroy()

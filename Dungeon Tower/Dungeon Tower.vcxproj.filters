@@ -28,6 +28,9 @@
     <Filter Include="Resource Files\Dungeon Tiles\Misc">
       <UniqueIdentifier>{7b8c38f2-3123-454c-9e8c-0f41990bdc4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Fonts">
+      <UniqueIdentifier>{f7111c20-7d10-48b2-8c12-466788c858b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -94,6 +97,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Door.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuBackground.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogBoxSprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,6 +185,18 @@
     <ClInclude Include="Door.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MainMenuBackground.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogBoxSprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Dungeon Tower.rc">
@@ -234,5 +261,19 @@
     <Image Include="Dungeon Tiles\Misc\Heart.png">
       <Filter>Resource Files\Dungeon Tiles\Misc</Filter>
     </Image>
+    <Image Include="Dungeon Tiles\Misc\Door.png">
+      <Filter>Resource Files\Dungeon Tiles\Misc</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\Misc\BackgroundTiles.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Dungeon Tiles\Misc\DialogBox.png">
+      <Filter>Resource Files\Dungeon Tiles\Misc</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Fonts\Squares Bold Free.otf">
+      <Filter>Resource Files\Fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

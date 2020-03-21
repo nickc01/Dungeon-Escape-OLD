@@ -88,6 +88,20 @@ HEART_SPRITE            PNG                     "Dungeon Tiles\\Misc\\Heart.png"
 
 POWER_ORB               PNG                     "Dungeon Tiles\\Misc\\PowerOrb.png"
 
+DOOR_SPRITE             PNG                     "Dungeon Tiles\\Misc\\Door.png"
+
+BACKGROUND_TILES        PNG                     "Dungeon Tiles\\Misc\\BackgroundTiles.png"
+
+DIALOG_BOX_TEXTURE      PNG                     "Dungeon Tiles\\Misc\\DialogBox.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// RCDATA
+//
+
+GAME_FONT               RCDATA                  "Fonts\\Squares Bold Free.otf"
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

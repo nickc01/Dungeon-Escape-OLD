@@ -40,11 +40,15 @@ int main()
 
 	//UpdateWindowView(mapCenter);
 
-	thread gameThread(GameManager::StartGame);
+	//thread gameThread(GameManager::StartGame);
+
+	GameManager manager{};
+
+	manager.Start();
 
 	Clock clock;
 
-	while (window.isOpen())
+	while (!manager.IsComplete())
 	{
 		Event e;
 
@@ -52,14 +56,11 @@ int main()
 		{
 			auto lockObject = unique_lock<recursive_mutex>(UpdateReceiver::GetMutex());
 			auto updatables = UpdateReceiver::GetUpdatables();
+
 			for (auto i = updatables.rbegin(); i != updatables.rend(); i++)
 			{
 				(**i).Update(dt);
 			}
-			/*for (UpdateReceiver* updatable : UpdateReceiver::GetUpdatables())
-			{
-				updatable->Update(dt);
-			}*/
 		}
 
 
@@ -68,6 +69,7 @@ int main()
 			if (e.type == e.Closed)
 			{
 				window.close();
+				manager.EndTheGame();
 			}
 
 			if (e.type == e.Resized)
@@ -84,21 +86,22 @@ int main()
 
 			auto& renderables = Renderable::GetRenderables();
 
-			for (int i = 0; i < renderables.size(); i++)
+			for (auto i = rbegin(renderables); i != rend(renderables); i++)
 			{
-				renderables[i]->Render(window);
+				(**i).Render(window);
 			}
-
-			/*for (const Renderable* renderObject : Renderable::GetRenderables())
-			{
-				renderObject->Render(window);
-			}*/
 		}
 
 		window.display();
 
+		if (manager.IsComplete())
+		{
+			window.close();
+		}
+
 	}
 
-	GameManager::EndingGame = true;
-	gameThread.join();
+	manager.EndTheGame();
+	//GameManager::EndingGame = true;
+	//gameThread.join();
 }
