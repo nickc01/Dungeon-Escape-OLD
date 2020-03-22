@@ -333,10 +333,18 @@ std::vector<sf::Vector2i>& Room::GetEnemySpawnPoints()
 //Checks if the room intersects with a specified background tile
 bool Room::Intersects(const BackgroundTile& tile) const
 {
+
 	//Get the rect bounds of the room
 	auto rectA = Rect<float>(GetRect());
 	//Get the rect bounds of the background tile
 	auto rectB = tile.GetSprite().getGlobalBounds();
+
+	auto tileSize = tile.GetSprite().getTextureRect();
+
+	//Divide the bounds of the tile with it's textureSize
+	rectB.width /= tileSize.width;
+	rectB.height /= tileSize.height;
+
 	//Check if they intersect
 	return Math::RectsIntersect(rectA, rectB);
 }
@@ -348,6 +356,13 @@ bool Room::Intersects(const Room& B) const
 	auto rectA = GetRect();
 	//Get the rect bounds of the other room
 	auto rectB = B.GetRect();
+
+	//Add 1 to the width and height of each room rect to prevent ensure rooms don't touch end to end
+	rectB.width++;
+	rectB.height++;
+
+	rectA.width++;
+	rectA.height++;
 
 	//Check if they intersect
 	return Math::RectsIntersect(rectA, rectB);
@@ -543,7 +558,7 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 		auto allBranches = GetAllBranchesInHierarchy();
 
 		//Check to make sure both the newly added destination room and the newly added branch don't collide with anything
-		if (CheckForCollision(destinationRoom.get()))
+		if (CheckForCollision(destinationRoom.get()) || branch->CheckForCollisions(this))
 		{
 			//If they do collide with something, remove the branch and the destination room, and try again
 			(*branchPtr) = nullptr;
