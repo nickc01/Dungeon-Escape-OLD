@@ -9,7 +9,7 @@ using namespace sf; //Prevents me from having to type sf everywhere
 void GameManager::MenuUpdate()
 {
 	//If the enter key has been pressed
-	if (Keyboard::isKeyPressed(sf::Keyboard::Enter))
+	if (Common::MainWindow.hasFocus() && Keyboard::isKeyPressed(sf::Keyboard::Enter))
 	{
 		//Destroy the title text
 		TitleText = nullptr;
@@ -35,7 +35,7 @@ void GameManager::StoryUpdate()
 	if (enterHeld)
 	{
 		//Wait until it is released
-		if (!Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		if (Common::MainWindow.hasFocus() && !Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
 			enterHeld = false;
 		}
@@ -44,7 +44,7 @@ void GameManager::StoryUpdate()
 	else
 	{
 		//Wait until the enter key is pressed again
-		if (Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		if (Common::MainWindow.hasFocus() && Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
 			//Enter is now being held down
 			enterHeld = true;
@@ -72,7 +72,7 @@ void GameManager::InstructionUpdate()
 	if (enterHeld)
 	{
 		//Wait until it is released
-		if (!Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		if (Common::MainWindow.hasFocus() && !Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
 			enterHeld = false;
 		}
@@ -81,7 +81,7 @@ void GameManager::InstructionUpdate()
 	else
 	{
 		//Wait until the enter key is pressed again
-		if (Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		if (Common::MainWindow.hasFocus() && Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
 			//Go to the game state
 			currentState = GameState::Game;
@@ -154,7 +154,7 @@ void GameManager::GameUpdate()
 void GameManager::EndUpdate()
 {
 	//If the enter key is pressed
-	if (Keyboard::isKeyPressed(sf::Keyboard::Enter))
+	if (Common::MainWindow.hasFocus() && Keyboard::isKeyPressed(sf::Keyboard::Enter))
 	{
 		//End the game
 		End();

@@ -543,7 +543,7 @@ void Room::AddRoomToHierarchy(shared_ptr<Room> destinationRoom)
 		auto allBranches = GetAllBranchesInHierarchy();
 
 		//Check to make sure both the newly added destination room and the newly added branch don't collide with anything
-		if (CheckForCollision(destinationRoom.get()) || branch->CheckForCollisions(this))
+		if (CheckForCollision(destinationRoom.get()))
 		{
 			//If they do collide with something, remove the branch and the destination room, and try again
 			(*branchPtr) = nullptr;

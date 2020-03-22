@@ -94,10 +94,11 @@ void Branch::CreateTiles()
 }
 
 //Builds a single tile
-void Branch::BuildTile(const Sprite& sprite, Vector2<int> position)
+void Branch::BuildTile(const Sprite& sprite, Vector2<int> position, bool canOverlap)
 {
 	//Add a new background tile to the list of tiles
 	tiles.push_back(BackgroundTile::Create(sprite, position));
+	this->canOverlap.push_back(canOverlap);
 }
 
 void Branch::BuildJointPiece(Direction direction, Vector2i position)
@@ -115,13 +116,13 @@ void Branch::BuildJointPiece(Direction direction, Vector2i position)
 	auto forwardVector = VectorInDirection(direction, 1);
 
 	//Build the center of the joint
-	BuildTile(Common::Sprites::centerPiece2,position);
+	BuildTile(Common::Sprites::centerPiece2,position,true);
 
 	//Build the left side of the joint
-	BuildTile(Common::GetJointPiece(leftDirection, direction), position + rightVector);
+	BuildTile(Common::GetJointPiece(leftDirection, direction), position + rightVector,true);
 
 	//Build the right side of the joint
-	BuildTile(Common::GetJointPiece(rightDirection, direction), position + leftVector);
+	BuildTile(Common::GetJointPiece(rightDirection, direction), position + leftVector,true);
 
 }
 
@@ -321,8 +322,20 @@ bool Branch::CheckForCollisions(Room* TopRoom)
 	//Loop over all the rooms in the hierarchy
 	for (auto room : TopRoom->GetAllRoomsInHierarchy())
 	{
+
 		//Loop over all the tiles in each room
-		for (auto& tile : GetTiles())
+		auto& tiles = GetTiles();
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			auto& tile = tiles[i];
+			bool overlapable = canOverlap[i];
+			//Check if the room intersects with any of the branch's tiles
+			if (!overlapable && room->Intersects(*tile))
+			{
+				return true;
+			}
+		}
+		/*for (auto& tile : GetTiles())
 		{
 			//Check if the room intersects with any of the branch's tiles
 			if (room->Intersects(*tile))
@@ -330,7 +343,7 @@ bool Branch::CheckForCollisions(Room* TopRoom)
 				//If it does, return true
 				return true;
 			}
-		}
+		}*/
 	}
 
 	//Loop over all of the branches in the room hierarchy

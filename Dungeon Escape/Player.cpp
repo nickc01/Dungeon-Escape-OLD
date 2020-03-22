@@ -223,7 +223,7 @@ void Player::Update(sf::Time dt)
 	bool isMoving = false;
 
 	//If the Up or W keys are pressed
-	if (Keyboard::isKeyPressed(Keyboard::Key::Up) || Keyboard::isKeyPressed(Keyboard::Key::W))
+	if (Common::MainWindow.hasFocus() && (Keyboard::isKeyPressed(Keyboard::Key::Up) || Keyboard::isKeyPressed(Keyboard::Key::W)))
 	{
 		//Move the player up
 		Move(0.0f,-60.0f * time);
@@ -233,7 +233,7 @@ void Player::Update(sf::Time dt)
 		isMoving = true;
 	}
 	//If the Down or S keys are pressed
-	if (Keyboard::isKeyPressed(Keyboard::Key::Down) || Keyboard::isKeyPressed(Keyboard::Key::S))
+	if (Common::MainWindow.hasFocus() && (Keyboard::isKeyPressed(Keyboard::Key::Down) || Keyboard::isKeyPressed(Keyboard::Key::S)))
 	{
 		//Move the player down
 		Move(0.0f, 60.0f * time);
@@ -243,7 +243,7 @@ void Player::Update(sf::Time dt)
 		isMoving = true;
 	}
 	//If the Right or D keys are pressed
-	if (Keyboard::isKeyPressed(Keyboard::Key::Right) || Keyboard::isKeyPressed(Keyboard::Key::D))
+	if (Common::MainWindow.hasFocus() && (Keyboard::isKeyPressed(Keyboard::Key::Right) || Keyboard::isKeyPressed(Keyboard::Key::D)))
 	{
 		//Move the player right
 		Move(60.0f * time, 0.0f);
@@ -253,7 +253,7 @@ void Player::Update(sf::Time dt)
 		isMoving = true;
 	}
 	//If the Left or A keys are pressed
-	if (Keyboard::isKeyPressed(Keyboard::Key::Left) || Keyboard::isKeyPressed(Keyboard::Key::A))
+	if (Common::MainWindow.hasFocus() && (Keyboard::isKeyPressed(Keyboard::Key::Left) || Keyboard::isKeyPressed(Keyboard::Key::A)))
 	{
 		//Move the player left
 		Move(-60.0f * time, 0.0f);
@@ -267,7 +267,7 @@ void Player::Update(sf::Time dt)
 	if (orbSpawnTimer <= 0.0f)
 	{
 		//If the left mouse button is pressed
-		if (Mouse::isButtonPressed(Mouse::Left))
+		if (Common::MainWindow.hasFocus() && Mouse::isButtonPressed(Mouse::Left))
 		{
 			//Reset the orb spawn timer
 			orbSpawnTimer = ORB_SPAWN_RATE;
@@ -276,7 +276,7 @@ void Player::Update(sf::Time dt)
 			MagicOrb::Fire(GetMap(), GetSprite()->getPosition(), Common::GetMouseWorldCoordinates() - GetSprite()->getPosition());
 		}
 		//If the space bar is pressed
-		else if (Keyboard::isKeyPressed(Keyboard::Key::Space))
+		else if (Common::MainWindow.hasFocus() && Keyboard::isKeyPressed(Keyboard::Key::Space))
 		{
 			//Reset the orb spawn timer
 			orbSpawnTimer = ORB_SPAWN_RATE;

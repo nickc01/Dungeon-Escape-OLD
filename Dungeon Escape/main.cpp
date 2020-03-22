@@ -23,6 +23,8 @@ int main()
 	//Create all the common sprites
 	Common::CreateSprites();
 
+	Common::MainWindow.setVerticalSyncEnabled(true);
+
 	//Refresh the window size
 	Common::RefreshWindow();
 

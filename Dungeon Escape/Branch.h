@@ -25,12 +25,13 @@ class Branch
 	sf::Vector2<int> startPoint = sf::Vector2<int>(0, 0); //The point where the branch path starts
 
 	std::vector<std::shared_ptr<BackgroundTile>> tiles; //The tiles that make up the branch path
+	std::vector<bool> canOverlap; //An array that determines which tiles can safely overlap rooms or not
 
 	//Creates all the tiles that make up the branch
 	void CreateTiles();
 
 	//Builds a single tile
-	void BuildTile(const sf::Sprite& sprite, sf::Vector2<int> position);
+	void BuildTile(const sf::Sprite& sprite, sf::Vector2<int> position, bool canOverlap = false);
 	//Builds a new joint piece at the specified position
 	void BuildJointPiece(Direction direction, sf::Vector2i position);
 	//Builds a new straight piece at the specified position
