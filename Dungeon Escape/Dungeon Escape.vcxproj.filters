@@ -199,7 +199,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Dungeon Tower.rc">
+    <ResourceCompile Include="Dungeon Escape.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

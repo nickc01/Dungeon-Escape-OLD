@@ -22,8 +22,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{7DB3CC8C-A1BC-4BE5-8A40-4B4AD33E384D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>DungeonTower</RootNamespace>
+    <RootNamespace>DungeonEscape</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Dungeon Escape</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -223,7 +224,7 @@ copy /y "$(SolutionDir)lib\SFML\$(ConfigurationName)\*.pdb" "$(OutputPath)"</Com
     <ClInclude Include="WorldMap.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Dungeon Tower.rc" />
+    <ResourceCompile Include="Dungeon Escape.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Dungeon Tiles\BottomJoint.png" />
