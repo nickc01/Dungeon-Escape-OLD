@@ -339,7 +339,7 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
-!lib/Debug
-!lib/Debug/*.*
-!lib/Release
-!lib/Release/*.*
+!lib/SFML/Debug
+!lib/SFML/Debug/*.*
+!lib/SFML/Release
+!lib/SFML/Release/*.*
