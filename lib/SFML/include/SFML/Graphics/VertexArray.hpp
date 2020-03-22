@@ -33,7 +33,7 @@
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Drawable.hpp>
-#include <vector>
+#include <vector> //Contains std::vector for storing objects in an array
 
 
 namespace sf

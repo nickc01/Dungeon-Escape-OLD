@@ -25,7 +25,6 @@
 #define BACKGROUND_TILES                130
 #define IDB_PNG1                        140
 #define GAME_FONT                       145
-#define IDB_PNG2                        146
 #define DIALOG_BOX_TEXTURE              146
 
 // Next default values for new objects

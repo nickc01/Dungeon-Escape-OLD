@@ -1,53 +1,64 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <algorithm>
-#include <type_traits>
-#include <exception>
-#include <string>
-#include <mutex>
+#include <SFML/Graphics.hpp> //Contains many essential SFML classes and functions for rendering
+#include <algorithm> //Contains many commonly used algorithms such as std::sort and std::finds>
+#include <string> //Contains std::string
+#include <mutex> //Contains std::mutex and std::recursive_mutex for resource locking and to prevent data races
 
 
 
 
-
+//Used to store a collection of all instantiated objects
 template<typename objectType,typename MutexType = std::recursive_mutex>
 class ObjectManager
 {
 
-	static std::vector<objectType*> list;
-	static MutexType listLock;
+	static std::vector<objectType*> list; //The list of all instantiated objects
+	static MutexType listLock; //The lock for the object list
 
-	bool inList;
+	bool inList; //Whether this object is in the list or not
 
+	//Adds the object to the list
 	static void AddToList(objectType* object)
 	{
+		//Lock the list mutex
 		auto lockObject = std::unique_lock<MutexType>(listLock);
+		//Add the object to the list
 		list.push_back(object);
 	}
+	//Removes the object from the list
 	static void RemoveFromList(objectType* object)
 	{
+		//Lock the list mutex
 		auto lockObject = std::unique_lock<MutexType>(listLock);
+		//Remove the object from the list
 		list.erase(std::remove(begin(list),end(list),object),end(list));
 	}
 
 protected:
-	static std::vector<objectType*>& GetEventList()
+	//Gets the object list
+	static std::vector<objectType*>& GetObjectList()
 	{
 		return list;
 	}
 
+	//Sets whether an object is active in the list or not
 	void SetActive(bool enable)
 	{
+		//If the passed in value is different
 		if (inList != enable)
 		{
 			inList = enable;
+			//If the object is to be in the list and enabled
 			if (inList)
 			{
+				//Add it to the list
 				AddToList(static_cast<objectType*>(this));
 			}
+			//If the object is to not be in the list and disabled
 			else
 			{
+				//Remove it from the list
 				RemoveFromList(static_cast<objectType*>(this));
 			}
 		}
@@ -55,13 +66,17 @@ protected:
 
 public:
 
+	//Constructs a new object manager
 	ObjectManager() : ObjectManager(true) {}
 
+	//Constructs a new object manager
 	ObjectManager(bool enabled) :
 		inList(enabled)
 	{
+		//If the object is to be enabled
 		if (enabled)
 		{
+			//Add it to the list
 			AddToList(static_cast<objectType*>(this));
 		}
 	}
@@ -94,6 +109,7 @@ public:
 		return *this;
 	}
 
+	//Destructor
 	virtual ~ObjectManager()
 	{
 		SetActive(false);
@@ -110,7 +126,7 @@ public:
 };
 
 template<typename objectType,typename MutexType>
-std::vector<objectType*> ObjectManager<objectType,MutexType>::list{};
+std::vector<objectType*> ObjectManager<objectType,MutexType>::list{};  //The list of all instantiated objects
 
 template<typename objectType,typename MutexType>
-MutexType ObjectManager<objectType,MutexType>::listLock{};
+MutexType ObjectManager<objectType,MutexType>::listLock{}; //The lock for the object list

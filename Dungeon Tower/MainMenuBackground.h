@@ -1,20 +1,21 @@
 #pragma once
-#include "Renderable.h"
-#include "ResourceTexture.h"
+#include "Renderable.h" //Contains the Renderable class for rendering to the game window
+#include "ResourceTexture.h" //Contains the ResourceTexture class for loading in texture resources
 
+//Represents the background of the main menu
 class MainMenuBackground : public Renderable
 {
-	static ResourceTexture backgroundTilesTexture;
+	static ResourceTexture menuBackgroundTexture; //The texture resource for the main menu background
 
 
-	sf::Sprite backgroundSprite;
+	sf::Sprite menuBackgroundSprite; //The sprite for the menu background
 
 public:
 
-	// Inherited via Renderable
+	//Renders the menu background to the screen
 	virtual void Render(sf::RenderWindow& window) override;
 
-
+	//Constructs a new MainMenuBackground
 	MainMenuBackground();
 
 };
